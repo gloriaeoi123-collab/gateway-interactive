@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gateway Interactive | C1 · Connected developments</title>
+<style>
+:root{--cream:#f4f1e8;--card:#fff;--gold:#d7aa42;--blue:#173b57;--red:#b23a3a;--green:#2f7d4a;--muted:#6c7a84}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--cream);font-family:Arial,Helvetica,sans-serif;color:var(--blue);padding:24px}
+.card{width:min(980px,96vw);background:var(--card);border:4px solid var(--gold);border-radius:24px;padding:28px;box-shadow:0 12px 30px rgba(0,0,0,.10)}
+.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-weight:700;font-size:.78rem;color:#b98c27;text-align:center}
+h1{margin:8px 0 4px;text-align:center;font-size:clamp(2rem,4vw,3.2rem)}
+.subtitle{text-align:center;color:var(--muted);margin-bottom:22px}
+.game{display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:center}
+.hangman-box{display:flex;justify-content:center}
+svg{width:230px;max-width:100%;height:auto}
+.gallows{stroke:var(--blue);stroke-width:5;stroke-linecap:round}
+.person{stroke:var(--red);stroke-width:5;stroke-linecap:round;fill:none;visibility:hidden}
+.phrase{display:flex;flex-wrap:wrap;gap:14px 24px;justify-content:center;margin:10px 0 22px;min-height:120px}
+.word{display:flex;gap:6px}
+.slot{width:28px;height:42px;border-bottom:4px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:1.55rem;font-weight:700}
+.letters{display:grid;grid-template-columns:repeat(9,1fr);gap:8px;margin:18px 0}
+.letter-btn{border:2px solid var(--gold);background:#fffaf0;color:var(--blue);border-radius:10px;padding:10px 0;font-weight:700;cursor:pointer}
+.letter-btn.correct{background:#e4f2e8;border-color:var(--green);color:var(--green)}
+.letter-btn.wrong{background:#f8e3e3;border-color:var(--red);color:var(--red)}
+.letter-btn:disabled{opacity:.45}
+.status{text-align:center;color:var(--muted);margin-top:8px}
+.message{text-align:center;min-height:34px;font-weight:700;font-size:1.15rem;margin-top:12px}
+.success{color:var(--green)} .failure{color:var(--red)}
+.controls{text-align:center;margin-top:12px}
+button.ctrl{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;margin:4px}
+.clue-btn{background:var(--gold);color:#172d3d}.reset-btn{background:var(--blue);color:#fff}
+.clue,.example{display:none;margin:16px auto 0;max-width:690px;border-radius:8px;padding:12px 14px}
+.clue{background:#fff8e3;border-left:5px solid var(--gold);color:#43545f}
+.example{background:#eef5f6;text-align:center;color:#455963}
+@media(max-width:760px){.game{grid-template-columns:1fr}.hangman-box{order:2}.play{order:1}.letters{grid-template-columns:repeat(7,1fr)}}
+@media(max-width:500px){.letters{grid-template-columns:repeat(6,1fr)}.slot{width:23px;font-size:1.35rem}}
+</style>
+</head>
+<body>
+<main class="card">
+<div class="eyebrow">Gateway · Flashcard Challenge</div>
+<h1>Gateway Hangman</h1>
+<div class="subtitle">Find the hidden expression.</div>
+
+<section class="game">
+<div class="hangman-box">
+<svg viewBox="0 0 260 280">
+<line class="gallows" x1="30" y1="255" x2="205" y2="255"/>
+<line class="gallows" x1="70" y1="255" x2="70" y2="30"/>
+<line class="gallows" x1="70" y1="30" x2="180" y2="30"/>
+<line class="gallows" x1="180" y1="30" x2="180" y2="65"/>
+<circle id="p1" class="person" cx="180" cy="88" r="23"/>
+<line id="p2" class="person" x1="180" y1="111" x2="180" y2="175"/>
+<line id="p3" class="person" x1="180" y1="130" x2="145" y2="150"/>
+<line id="p4" class="person" x1="180" y1="130" x2="215" y2="150"/>
+<line id="p5" class="person" x1="180" y1="175" x2="150" y2="220"/>
+<line id="p6" class="person" x1="180" y1="175" x2="210" y2="220"/>
+</svg>
+</div>
+
+<div class="play">
+<div id="phrase" class="phrase"></div>
+<div id="letters" class="letters"></div>
+<div class="status">Mistakes: <strong><span id="mistakes">0</span>/6</strong> · Wrong guesses: <strong id="wrong">—</strong></div>
+<div id="message" class="message"></div>
+<div class="controls">
+<button id="clueBtn" class="ctrl clue-btn">Clue</button>
+<button id="resetBtn" class="ctrl reset-btn">Play again</button>
+</div>
+<div id="clue" class="clue"><strong>Clue:</strong> used when two things are closely connected and often happen or exist together.</div>
+<div id="example" class="example"><em>Example: “Economic growth often goes hand in hand with increased energy consumption.”</em><br><strong>Expression: to go hand in hand with</strong></div>
+</div>
+</section>
+</main>
+
+<script>
+const target="TO GO HAND IN HAND WITH";
+const maxMistakes=6;
+let guessed=new Set(), mistakes=0, finished=false;
+
+const phrase=document.getElementById("phrase");
+const letters=document.getElementById("letters");
+const mistakesEl=document.getElementById("mistakes");
+const wrongEl=document.getElementById("wrong");
+const message=document.getElementById("message");
+const clue=document.getElementById("clue");
+const example=document.getElementById("example");
+
+function buildPhrase(){
+  phrase.innerHTML="";
+  target.split(" ").forEach(word=>{
+    const w=document.createElement("div"); w.className="word";
+    [...word].forEach(ch=>{
+      const s=document.createElement("div"); s.className="slot";
+      s.textContent=guessed.has(ch)?ch:"";
+      w.appendChild(s);
+    });
+    phrase.appendChild(w);
+  });
+}
+
+function buildKeyboard(){
+  letters.innerHTML="";
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l=>{
+    const b=document.createElement("button");
+    b.className="letter-btn"; b.textContent=l; b.dataset.letter=l;
+    b.addEventListener("click",()=>guess(l));
+    letters.appendChild(b);
+  });
+}
+
+function update(){
+  for(let i=1;i<=6;i++) document.getElementById("p"+i).style.visibility=i<=mistakes?"visible":"hidden";
+  const wrong=[...guessed].filter(l=>!target.includes(l));
+  wrongEl.textContent=wrong.length?wrong.join(", "):"—";
+  mistakesEl.textContent=mistakes;
+  document.querySelectorAll(".letter-btn").forEach(b=>{
+    const l=b.dataset.letter;
+    b.disabled=guessed.has(l)||finished;
+    b.classList.remove("correct","wrong");
+    if(guessed.has(l)) b.classList.add(target.includes(l)?"correct":"wrong");
+  });
+}
+
+function solved(){return [...target].every(ch=>ch===" "||guessed.has(ch));}
+
+function guess(l){
+  if(finished||guessed.has(l)) return;
+  guessed.add(l);
+  if(!target.includes(l)) mistakes++;
+  buildPhrase(); update();
+
+  if(solved()){
+    finished=true;
+    message.className="message success";
+    message.textContent="✓ Exactly: to go hand in hand with.";
+    example.style.display="block";
+    update();
+  } else if(mistakes>=maxMistakes){
+    finished=true;
+    [...target].forEach(ch=>{if(ch!==" ") guessed.add(ch)});
+    buildPhrase();
+    message.className="message failure";
+    message.textContent="Not this time. The expression is: to go hand in hand with.";
+    example.style.display="block";
+    update();
+  }
+}
+
+function reset(){
+  guessed=new Set(); mistakes=0; finished=false;
+  message.textContent=""; message.className="message";
+  clue.style.display="none"; example.style.display="none";
+  buildPhrase(); buildKeyboard(); update();
+}
+
+document.getElementById("clueBtn").addEventListener("click",()=>clue.style.display=clue.style.display==="block"?"none":"block");
+document.getElementById("resetBtn").addEventListener("click",reset);
+document.addEventListener("keydown",e=>{const k=e.key.toUpperCase();if(/^[A-Z]$/.test(k)) guess(k)});
+reset();
+</script>
+</body>
+</html>

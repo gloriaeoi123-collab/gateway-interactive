@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gateway Interactive | B2 · Unexpected encounters</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f1e8;
+    color: #17354a;
+}
+
+.game {
+    max-width: 820px;
+    margin: auto;
+    background: white;
+    border: 2px solid #d4b35f;
+    border-radius: 18px;
+    padding: 28px;
+}
+
+h1 {
+    margin: 0;
+    text-align: center;
+    color: #123e52;
+    font-size: 2rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6c6c6c;
+    margin: 8px 0 25px;
+}
+
+.main {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.drawing {
+    width: 220px;
+}
+
+svg {
+    width: 100%;
+    height: auto;
+}
+
+.person {
+    display: none;
+    stroke: #9c2531;
+    stroke-width: 5;
+    stroke-linecap: round;
+    fill: none;
+}
+
+.word-area {
+    flex: 1;
+    min-width: 280px;
+    text-align: center;
+}
+
+.word {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 25px 0;
+}
+
+.letter-box {
+    width: 39px;
+    height: 50px;
+    border-bottom: 3px solid #17354a;
+    font-size: 28px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.word-space {
+    width: 26px;
+    height: 50px;
+}
+
+.info {
+    font-size: 1rem;
+    margin: 12px 0;
+}
+
+.wrong {
+    color: #9c2531;
+    font-weight: bold;
+    min-height: 24px;
+}
+
+.keyboard {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 7px;
+    margin-top: 25px;
+}
+
+.keyboard button {
+    min-height: 43px;
+    border: 1px solid #c8c8c8;
+    border-radius: 8px;
+    background: #eef4f4;
+    color: #123e52;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.keyboard button:hover:not(:disabled) {
+    background: #d9e9e9;
+}
+
+.keyboard button:disabled {
+    opacity: 0.38;
+    cursor: default;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.controls button {
+    border: none;
+    border-radius: 9px;
+    padding: 11px 20px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#hintBtn {
+    background: #d4b35f;
+    color: #172b36;
+}
+
+#restartBtn {
+    background: #173f50;
+    color: white;
+}
+
+.hint {
+    display: none;
+    margin: 18px auto 0;
+    padding: 13px 18px;
+    max-width: 560px;
+    background: #fff8df;
+    border-left: 5px solid #d4b35f;
+    text-align: left;
+}
+
+.message {
+    margin-top: 18px;
+    min-height: 34px;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.success {
+    color: #23734d;
+}
+
+.failure {
+    color: #a02732;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .game {
+        padding: 20px 12px;
+    }
+
+    .keyboard {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .letter-box {
+        width: 29px;
+        height: 42px;
+        font-size: 22px;
+    }
+
+    .word-space {
+        width: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>Gateway Hangman</h1>
+    <div class="subtitle">Find the hidden expression.</div>
+
+    <div class="main">
+
+        <div class="drawing">
+            <svg viewBox="0 0 220 260" aria-label="Hangman drawing">
+
+                <line x1="25" y1="240" x2="190" y2="240"
+                      stroke="#17354a" stroke-width="5"/>
+
+                <line x1="55" y1="240" x2="55" y2="25"
+                      stroke="#17354a" stroke-width="5"/>
+
+                <line x1="55" y1="25" x2="155" y2="25"
+                      stroke="#17354a" stroke-width="5"/>
+
+                <line x1="155" y1="25" x2="155" y2="55"
+                      stroke="#17354a" stroke-width="5"/>
+
+                <circle class="person" cx="155" cy="76" r="20"/>
+
+                <line class="person"
+                      x1="155" y1="96" x2="155" y2="155"/>
+
+                <line class="person"
+                      x1="155" y1="112" x2="125" y2="137"/>
+
+                <line class="person"
+                      x1="155" y1="112" x2="185" y2="137"/>
+
+                <line class="person"
+                      x1="155" y1="155" x2="130" y2="195"/>
+
+                <line class="person"
+                      x1="155" y1="155" x2="180" y2="195"/>
+
+            </svg>
+        </div>
+
+        <div class="word-area">
+
+            <div class="info">
+                Mistakes remaining:
+                <strong id="remaining">6</strong>
+            </div>
+
+            <div id="word" class="word"></div>
+
+            <div>
+                Wrong guesses:
+                <span id="wrong" class="wrong">—</span>
+            </div>
+
+            <div id="message"
+                 class="message"
+                 aria-live="polite"></div>
+
+        </div>
+
+    </div>
+
+    <div id="keyboard" class="keyboard"></div>
+
+    <div class="controls">
+
+        <button id="hintBtn" type="button">
+            Give me a clue
+        </button>
+
+        <button id="restartBtn" type="button">
+            Play again
+        </button>
+
+    </div>
+
+    <div id="hint" class="hint">
+        <strong>Clue:</strong>
+        To find, meet or encounter somebody or something by chance.
+    </div>
+
+</div>
+
+<script>
+(function () {
+
+    const encodedAnswer = "Q09NRSBBQ1JPU1M=";
+    const answer = atob(encodedAnswer);
+
+    const maxMistakes = 6;
+
+    let guessed = new Set();
+    let wrongGuesses = [];
+    let mistakes = 0;
+    let finished = false;
+
+    const wordEl = document.getElementById("word");
+    const keyboardEl = document.getElementById("keyboard");
+    const wrongEl = document.getElementById("wrong");
+    const remainingEl = document.getElementById("remaining");
+    const messageEl = document.getElementById("message");
+    const hintEl = document.getElementById("hint");
+
+    const bodyParts =
+        document.querySelectorAll(".person");
+
+    function createKeyboard() {
+
+        keyboardEl.innerHTML = "";
+
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            .split("")
+            .forEach(letter => {
+
+                const button =
+                    document.createElement("button");
+
+                button.type = "button";
+                button.textContent = letter;
+                button.dataset.letter = letter;
+
+                button.addEventListener(
+                    "click",
+                    () => guess(letter)
+                );
+
+                keyboardEl.appendChild(button);
+            });
+    }
+
+    function renderWord(revealAll = false) {
+
+        wordEl.innerHTML = "";
+
+        for (const character of answer) {
+
+            if (character === " ") {
+
+                const space =
+                    document.createElement("span");
+
+                space.className = "word-space";
+
+                wordEl.appendChild(space);
+
+                continue;
+            }
+
+            const box =
+                document.createElement("span");
+
+            box.className = "letter-box";
+
+            if (
+                revealAll ||
+                guessed.has(character)
+            ) {
+                box.textContent = character;
+            } else {
+                box.textContent = "";
+            }
+
+            wordEl.appendChild(box);
+        }
+    }
+
+    function guess(letter) {
+
+        if (
+            finished ||
+            guessed.has(letter) ||
+            wrongGuesses.includes(letter)
+        ) {
+            return;
+        }
+
+        const button =
+            keyboardEl.querySelector(
+                '[data-letter="' + letter + '"]'
+            );
+
+        if (button) {
+            button.disabled = true;
+        }
+
+        if (answer.includes(letter)) {
+
+            guessed.add(letter);
+
+        } else {
+
+            wrongGuesses.push(letter);
+            mistakes++;
+
+            if (bodyParts[mistakes - 1]) {
+                bodyParts[mistakes - 1]
+                    .style.display = "block";
+            }
+        }
+
+        updateGame();
+    }
+
+    function updateGame() {
+
+        renderWord();
+
+        wrongEl.textContent =
+            wrongGuesses.length
+                ? wrongGuesses.join("  ")
+                : "—";
+
+        remainingEl.textContent =
+            maxMistakes - mistakes;
+
+        const completed =
+            [...answer].every(character =>
+                character === " " ||
+                guessed.has(character)
+            );
+
+        if (completed) {
+
+            finished = true;
+
+            messageEl.textContent =
+                "Excellent — you found the expression!";
+
+            messageEl.className =
+                "message success";
+
+            disableKeyboard();
+
+        } else if (
+            mistakes >= maxMistakes
+        ) {
+
+            finished = true;
+
+            renderWord(true);
+
+            messageEl.textContent =
+                "Not this time. The expression was COME ACROSS.";
+
+            messageEl.className =
+                "message failure";
+
+            disableKeyboard();
+        }
+    }
+
+    function disableKeyboard() {
+
+        keyboardEl
+            .querySelectorAll("button")
+            .forEach(button => {
+                button.disabled = true;
+            });
+    }
+
+    function resetGame() {
+
+        guessed = new Set();
+        wrongGuesses = [];
+        mistakes = 0;
+        finished = false;
+
+        bodyParts.forEach(part => {
+            part.style.display = "none";
+        });
+
+        messageEl.textContent = "";
+        messageEl.className = "message";
+
+        wrongEl.textContent = "—";
+        remainingEl.textContent = maxMistakes;
+
+        hintEl.style.display = "none";
+
+        createKeyboard();
+        renderWord();
+    }
+
+    document
+        .getElementById("hintBtn")
+        .addEventListener(
+            "click",
+            () => {
+                hintEl.style.display = "block";
+            }
+        );
+
+    document
+        .getElementById("restartBtn")
+        .addEventListener(
+            "click",
+            resetGame
+        );
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            const letter =
+                event.key.toUpperCase();
+
+            if (/^[A-Z]$/.test(letter)) {
+                guess(letter);
+            }
+        }
+    );
+
+    resetGame();
+
+})();
+</script>
+
+</body>
+</html>
