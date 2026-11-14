@@ -6,85 +6,116 @@ layout: null
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Gateway Interactive, by Gloria Hidalgo-Machirant. Interactive English-learning activities and games.">
-  <meta name="theme-color" content="#092b48">
+  <meta name="description" content="Gateway Interactive — interactive English-learning activities and games by Gloria Hidalgo-Machirant.">
+  <meta name="theme-color" content="#102f45">
   <title>Gateway Interactive | Gloria Hidalgo-Machirant</title>
   <style>
-    :root { --navy:#082a48; --navy2:#0e3958; --gold:#c6a161; --gold-dark:#a97831; --cream:#f9f6ed; --paper:#fffdf8; --ink:#122d42; --muted:#526675; --border:#e6dccb; }
-    *{box-sizing:border-box} [hidden]{display:none !important}
-    html{scroll-behavior:smooth} body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-    a{color:inherit} a:focus-visible,input:focus-visible{outline:3px solid #cb9758;outline-offset:4px}
-    .wrap{width:min(1160px,calc(100% - 48px));margin-inline:auto}
-    .masthead{background:#fffdf8;border-bottom:3px solid var(--gold)}
-    .masthead-inner{display:flex;align-items:center;justify-content:space-between;gap:26px;min-height:130px}
-    .gateway-logo{width:clamp(210px,31vw,330px);height:auto;display:block}
-    .crest{height:118px;width:auto;display:block}
-    .small-link{font-size:.77rem;text-decoration:none;letter-spacing:.08em;font-weight:650;text-transform:uppercase;color:var(--navy2)}
-    .hero{position:relative;overflow:hidden;background:linear-gradient(118deg,#082a48 0%,#0f3b55 65%,#173e52 100%);color:#fffdf8}
-    .hero:after{content:"";position:absolute;inset:auto -170px -375px auto;width:820px;height:820px;border:1px solid #e3bb793b;border-radius:50%;box-shadow:0 0 0 90px #daba7620,0 0 0 185px #daba7614;pointer-events:none}
-    .hero-content{padding:72px 0 76px;position:relative;z-index:1}
-    .eyebrow{font-size:.72rem;font-weight:750;letter-spacing:.25em;text-transform:uppercase;color:#e9c68e;margin:0 0 13px}
-    h1,h2,h3{font-family:Georgia,'Times New Roman',serif;line-height:1.13;font-weight:normal}
-    h1{font-size:clamp(3.25rem,7.3vw,6.25rem);letter-spacing:-.035em;margin:0 0 14px}
-    .hero-subtitle{font:clamp(1.16rem,2.15vw,1.55rem)/1.4 Georgia,'Times New Roman',serif;color:#eed7b2;margin:0 0 18px}
-    .hero-description{max-width:650px;color:#e6eef2;margin:0 0 28px;font-size:1.06rem}
-    .byline{font-size:.93rem;color:#fffdf8;letter-spacing:.03em;margin:0 0 30px}
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-    .action{display:inline-flex;align-items:center;gap:16px;padding:12px 22px;border-radius:4px;border:1px solid #ecd5b0;text-decoration:none;font-weight:650;font-size:.89rem;transition:transform .15s}
-    .action:hover{transform:translateY(-2px)} .action.primary{color:var(--navy);background:#e9ce9d}
-    main{padding:68px 0 94px}
-    .section-header{display:flex;justify-content:space-between;gap:25px;align-items:flex-end;padding-bottom:25px;border-bottom:1px solid var(--border)}
-    .section-num{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:750;color:var(--gold-dark);margin:0 0 12px}
-    h2{font-size:clamp(2.2rem,4.7vw,3.6rem);letter-spacing:-.027em;margin:0 0 9px}
-    .section-description{max-width:670px;color:var(--muted);margin:0}
-    .search{font:inherit;background:white;border:1px solid #cdbfa9;border-radius:4px;padding:12px 15px;min-width:270px;max-width:100%;height:49px}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:27px}
-    .tile{display:flex;flex-direction:column;justify-content:space-between;min-height:148px;padding:22px 23px;gap:17px;background:var(--paper);text-decoration:none;border:1px solid var(--border);border-radius:5px;box-shadow:0 7px 25px #092a4712;transition:border-color .2s,transform .2s}
-    .tile:hover{border-color:var(--gold-dark);transform:translateY(-3px)}
-    .tile-top{display:flex;justify-content:space-between;align-items:center;color:#a47b48;font-size:.73rem;letter-spacing:.13em;font-weight:700}
-    .tile-name{font:1.36rem/1.28 Georgia,'Times New Roman',serif;overflow-wrap:anywhere}
-    .empty{border:1px dashed #c8bba4;background:var(--paper);margin-top:26px;padding:29px;color:var(--muted)}
-    .notice{color:var(--muted);margin-top:22px}
-    .games{margin-top:84px}
-    .later{margin-top:26px;padding:26px 30px;background:#f1e9da;border-left:4px solid var(--gold)}
-    .later strong{display:block;font:1.55rem Georgia,'Times New Roman',serif;margin-bottom:5px}
-    .later p{margin:0;color:var(--muted)}
-    footer{background:var(--navy);color:#f7f5ed;padding:33px 0 37px;border-top:4px solid var(--gold)}
-    .footer-inner{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;font-size:.89rem}
-    .footer-inner strong{font:1.38rem Georgia,'Times New Roman',serif;margin-bottom:5px}
-    footer a{color:#efcf96;text-decoration:none} footer a:hover{text-decoration:underline}
-    @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-header{flex-direction:column;align-items:stretch}.search{width:100%}.masthead-inner{min-height:100px}.crest{height:92px}}
-    @media(max-width:560px){.wrap{width:calc(100% - 30px)}.masthead-inner{gap:14px;min-height:85px}.gateway-logo{width:210px;max-width:calc(100vw - 125px)}.crest{height:76px}.hero-content{padding:55px 0 62px}.grid{grid-template-columns:1fr}.tile{min-height:118px}main{padding-top:51px}.games{margin-top:64px}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tile,.action{transition:none}}
+    :root {
+      --navy:#0b2b41; --navy2:#153e53; --teal:#195d61; --gold:#bc9252;
+      --gold-light:#f0d5a2; --paper:#fcf9f3; --cream:#f5f0e6; --ink:#173246;
+      --muted:#516571; --line:#dcd1be;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    [hidden]{display:none!important}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+    a{color:inherit}
+    a:focus-visible,input:focus-visible{outline:3px solid #c49b5c;outline-offset:4px}
+    .wrap{width:min(1080px,calc(100% - 52px));margin-inline:auto}
+    .masthead{background:var(--paper);border-bottom:1px solid #eadfce}
+    .masthead-inner{min-height:110px;display:flex;align-items:center;justify-content:space-between;gap:28px;padding-block:14px}
+    .gateway-logo{display:block;width:clamp(205px,24vw,262px);height:auto}
+    .crest{display:block;height:88px;width:auto}
+    h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.13;font-weight:normal}
+    .intro{background:var(--navy);color:var(--paper);border-bottom:4px solid var(--gold)}
+    .intro-inner{display:flex;justify-content:space-between;align-items:center;gap:35px;padding-block:38px 42px}
+    .intro-title{min-width:0}
+    .eyebrow{margin:0 0 7px;font-size:.74rem;font-weight:750;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
+    h1{margin:0 0 9px;font-size:clamp(2.6rem,5.2vw,4.35rem);letter-spacing:-.025em}
+    .tagline{margin:0;font:clamp(1.03rem,1.5vw,1.22rem)/1.5 Georgia,"Times New Roman",serif;color:#e5cfaa}
+    .author{font-size:.88rem;white-space:nowrap;color:#f2ede5;align-self:end;margin-bottom:6px}
+    .author strong{font-weight:650}
+    main{padding-block:42px 76px}
+    .collections{display:grid;grid-template-columns:1fr 1fr;gap:19px}
+    .collection{position:relative;overflow:hidden;min-height:226px;border:1px solid var(--line);background:var(--paper);padding:27px 29px 24px;display:flex;flex-direction:column;align-items:flex-start;box-shadow:0 8px 24px #102b4210}
+    .collection.active{border-top:5px solid var(--gold);text-decoration:none;transition:transform .18s,box-shadow .18s}
+    .collection.active:hover{transform:translateY(-3px);box-shadow:0 12px 28px #102b421a}
+    .collection.future{border-top:5px solid var(--teal);background:#eef0ea}
+    .collection-kicker{font-size:.71rem;font-weight:750;letter-spacing:.18em;text-transform:uppercase;color:#946929;margin-bottom:12px}
+    .future .collection-kicker{color:var(--teal)}
+    h2{font-size:clamp(1.95rem,3.4vw,2.7rem);letter-spacing:-.018em;margin:0 0 12px}
+    .collection p{max-width:420px;margin:0;color:var(--muted);font-size:.94rem}
+    .collection-bottom{margin-top:auto;padding-top:22px;font-size:.84rem;font-weight:750;letter-spacing:.025em}
+    .collection.active .collection-bottom{color:#936525}
+    .collection.future .collection-bottom{color:var(--teal)}
+    .rule{height:1px;background:var(--line);margin:49px 0 27px}
+    .catalog-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+    .catalog-kicker{font-size:.72rem;font-weight:750;letter-spacing:.18em;text-transform:uppercase;color:#936c32;margin:0 0 6px}
+    h3{font-size:clamp(1.7rem,3.2vw,2.55rem);margin:0 0 5px}
+    .catalog-desc{margin:0;color:var(--muted);font-size:.94rem}
+    .search{width:285px;max-width:100%;min-height:46px;background:var(--paper);color:var(--ink);border:1px solid #bcae98;border-radius:3px;font:inherit;padding:10px 13px}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:24px}
+    .tile{display:flex;flex-direction:column;justify-content:space-between;gap:19px;min-height:131px;padding:19px 21px;background:var(--paper);border:1px solid var(--line);text-decoration:none;transition:transform .15s,border-color .15s}
+    .tile:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .tile-top{display:flex;justify-content:space-between;font-size:.69rem;letter-spacing:.13em;font-weight:750;color:#957443}
+    .tile-name{font:1.31rem/1.3 Georgia,"Times New Roman",serif;overflow-wrap:anywhere}
+    .empty{margin:24px 0 0;padding:22px 24px;border:1px dashed #c8bba7;background:var(--paper);color:var(--muted);font-size:.96rem}
+    .notice{margin-top:18px;color:var(--muted)}
+    footer{background:var(--navy);color:var(--paper);border-top:3px solid var(--gold)}
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:22px;padding-block:29px}
+    .footer-primary{display:flex;flex-direction:column;gap:3px;font-size:.88rem}
+    .footer-primary strong{font:1.35rem Georgia,"Times New Roman",serif;margin-bottom:2px}
+    .footer-secondary{text-align:right;display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+    footer a{color:var(--gold-light);text-decoration:none}
+    footer a:hover{text-decoration:underline}
+    .credit{font-size:.77rem;opacity:.79}
+    @media(max-width:760px){.intro-inner{align-items:flex-start;flex-direction:column;gap:10px;padding-block:32px}.author{align-self:auto;margin:0}.collections{grid-template-columns:1fr}.collection{min-height:190px}.catalog-heading{align-items:stretch;flex-direction:column}.search{width:100%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:540px){.wrap{width:calc(100% - 34px)}.masthead-inner{min-height:83px;gap:13px;padding-block:8px}.gateway-logo{width:clamp(174px,56vw,218px)}.crest{height:72px}.intro-inner{padding-block:28px 31px}h1{font-size:clamp(2.45rem,9.3vw,3.1rem)}main{padding-block:25px 58px}.collection{padding:21px 22px;min-height:186px}.rule{margin:37px 0 25px}.grid{grid-template-columns:1fr}.tile{min-height:111px}.footer-inner{flex-direction:column;align-items:flex-start;gap:19px}.footer-secondary{text-align:left}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.collection.active,.tile{transition:none}}
   </style>
 </head>
 <body>
   <header class="masthead">
     <div class="wrap masthead-inner">
-      <a href="#top" aria-label="Gateway Interactive homepage"><img class="gateway-logo" src="{{ '/gateway-logo.png' | relative_url }}" alt="Gateway logo: a doorway opening onto a path"></a>
+      <a href="#top" aria-label="Gateway Interactive homepage"><img class="gateway-logo" src="{{ '/gateway-logo.png' | relative_url }}" alt="Gateway logo: an open doorway and a path"></a>
       <img class="crest" src="{{ '/glohima-crest.png' | relative_url }}" alt="Glohima logo and crest">
     </div>
   </header>
-  <section class="hero" id="top" aria-labelledby="page-title">
-    <div class="wrap hero-content">
-      <p class="eyebrow">English for all seasons</p>
-      <h1 id="page-title">Gateway Interactive</h1>
-      <p class="hero-subtitle">Interactive Activities &amp; Games</p>
-      <p class="hero-description">Explore language, make decisions and put your English to work. Open an activity to work independently, in full screen and at your own pace.</p>
-      <p class="byline">By <strong>Gloria Hidalgo-Machirant</strong></p>
-      <nav class="hero-actions" aria-label="Choose a collection">
-        <a class="action primary" href="#activities">Interactive Activities <span aria-hidden="true">↗</span></a>
-        <a class="action" href="#games">Interactive Games <span aria-hidden="true">↗</span></a>
-      </nav>
+
+  <section class="intro" id="top" aria-labelledby="page-title">
+    <div class="wrap intro-inner">
+      <div class="intro-title">
+        <p class="eyebrow">English for all seasons</p>
+        <h1 id="page-title">Gateway Interactive</h1>
+        <p class="tagline">Interactive Activities &amp; Games</p>
+      </div>
+      <p class="author">By <strong>Gloria Hidalgo-Machirant</strong></p>
     </div>
   </section>
+
   <main class="wrap">
+    <nav class="collections" aria-label="Gateway Interactive collections">
+      <a class="collection active" href="#activities">
+        <span class="collection-kicker">01 / Available now</span>
+        <h2>Interactive Activities</h2>
+        <p>Independent language practice. Choose an activity and work directly in your browser.</p>
+        <span class="collection-bottom">Explore activities <span aria-hidden="true">↗</span></span>
+      </a>
+      <div class="collection future" aria-label="Interactive Games, coming later">
+        <span class="collection-kicker">02 / Coming later</span>
+        <h2>Interactive Games</h2>
+        <p>Language challenges, simulations and games built around interaction and decisions.</p>
+        <span class="collection-bottom">Coming soon</span>
+      </div>
+    </nav>
+
     <section id="activities" aria-labelledby="activities-heading">
-      <div class="section-header">
+      <div class="rule" aria-hidden="true"></div>
+      <div class="catalog-heading">
         <div>
-          <p class="section-num">01 / Available collection</p>
-          <h2 id="activities-heading">Interactive Activities</h2>
-          <p class="section-description">A growing collection of independent language activities. Select an item to open it on its own page.</p>
+          <p class="catalog-kicker">Explore the collection</p>
+          <h3 id="activities-heading">Interactive Activities</h3>
+          <p class="catalog-desc">Open an activity to use it full-screen.</p>
         </div>
         <input id="activity-search" class="search" type="search" aria-label="Search activities" placeholder="Find an activity…">
       </div>
@@ -95,54 +126,38 @@ layout: null
           {% if file.path contains '/activities/' %}
             {% assign activity_count = activity_count | plus: 1 %}
             <a class="tile" href="{{ file.path | relative_url | escape }}" data-filename="{{ file.basename | escape }}">
-              <div class="tile-top"><span>ACTIVITY {{ activity_count }}</span><span aria-hidden="true">↗</span></div>
+              <span class="tile-top"><span>ACTIVITY {{ activity_count }}</span><span aria-hidden="true">↗</span></span>
               <span class="tile-name">{{ file.basename | replace: '-', ' ' | replace: '_', ' ' | escape }}</span>
             </a>
           {% endif %}
         {% endfor %}
       </div>
-      {% if activity_count == 0 %}<p class="empty">The first activities will appear here as they are uploaded.</p>{% endif %}
+      {% if activity_count == 0 %}<p class="empty">The first activities will appear here when they are uploaded.</p>{% endif %}
       <p id="no-results" class="notice" hidden>No activities match your search.</p>
     </section>
-    <section class="games" id="games" aria-labelledby="games-heading">
-      <div class="section-header">
-        <div>
-          <p class="section-num">02 / Future collection</p>
-          <h2 id="games-heading">Interactive Games</h2>
-          <p class="section-description">Games and interactive challenges will be added to this collection later.</p>
-        </div>
-      </div>
-      {% assign game_count = 0 %}
-      <div class="grid">
-        {% for file in html_files %}
-          {% if file.path contains '/games/' %}
-            {% assign game_count = game_count | plus: 1 %}
-            <a class="tile" href="{{ file.path | relative_url | escape }}">
-              <div class="tile-top"><span>GAME {{ game_count }}</span><span aria-hidden="true">↗</span></div>
-              <span class="tile-name">{{ file.basename | replace: '-', ' ' | replace: '_', ' ' | escape }}</span>
-            </a>
-          {% endif %}
-        {% endfor %}
-      </div>
-      {% if game_count == 0 %}<div class="later"><strong>Coming later</strong><p>For now, explore the Interactive Activities above.</p></div>{% endif %}
-    </section>
   </main>
+
   <footer>
     <div class="wrap footer-inner">
-      <strong>Gateway Interactive</strong>
-      <span>By Gloria Hidalgo-Machirant</span>
-      <span>EOI Alzira</span>
-      <a href="https://www.glohima.com" target="_blank" rel="noopener noreferrer">www.glohima.com</a>
+      <div class="footer-primary">
+        <strong>Gateway Interactive</strong>
+        <span>By Gloria Hidalgo-Machirant</span>
+        <span>EOI Alzira</span>
+      </div>
+      <div class="footer-secondary">
+        <a href="https://www.glohima.com" target="_blank" rel="noopener noreferrer">www.glohima.com</a>
+        <span class="credit">With editorial, linguistic and technical assistance from ChatGPT.</span>
+      </div>
     </div>
   </footer>
+
   <script>
     (() => {
       const search = document.getElementById('activity-search');
       const tiles = [...document.querySelectorAll('#activity-grid .tile')];
       const noResults = document.getElementById('no-results');
-      // Turn filenames like "the-museum-of-secrets.html" into readable titles.
       for (const tile of tiles) {
-        const title = (tile.dataset.filename || '').replace(/[_-]+/g,' ').replace(/\s+/g,' ').trim();
+        const title = (tile.dataset.filename || '').replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
         const label = title.replace(/\b[a-z]/g, letter => letter.toUpperCase());
         if (label) {
           tile.querySelector('.tile-name').textContent = label;
