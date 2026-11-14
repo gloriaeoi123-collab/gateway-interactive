@@ -6,105 +6,141 @@ layout: null
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Gateway Interactive — interactive English-learning activities and games by Gloria Hidalgo-Machirant.">
-  <meta name="theme-color" content="#102f45">
+  <meta name="description" content="Gateway Interactive — English-learning activities and games created by Gloria Hidalgo-Machirant.">
+  <meta name="theme-color" content="#0b3044">
   <title>Gateway Interactive | Gloria Hidalgo-Machirant</title>
   <style>
     :root {
-      --navy:#0b2b41; --navy2:#153e53; --teal:#195d61; --gold:#bc9252;
-      --gold-light:#f0d5a2; --paper:#fcf9f3; --cream:#f5f0e6; --ink:#173246;
-      --muted:#516571; --line:#dcd1be;
+      --navy:#0b2d43;
+      --teal:#164a50;
+      --gold:#c8a166;
+      --gold-light:#eed8b4;
+      --paper:#fcfaf5;
+      --cream:#f5f0e8;
+      --ink:#173445;
+      --muted:#526674;
+      --line:#e2d8ca;
     }
     *,*::before,*::after{box-sizing:border-box}
-    [hidden]{display:none!important}
     html{scroll-behavior:smooth}
-    body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+    body{margin:0;color:var(--ink);background:var(--cream);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
     a{color:inherit}
-    a:focus-visible,input:focus-visible{outline:3px solid #c49b5c;outline-offset:4px}
+    a:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+    [hidden]{display:none!important}
     .wrap{width:min(1080px,calc(100% - 52px));margin-inline:auto}
-    .masthead{background:var(--paper);border-bottom:1px solid #eadfce}
-    .masthead-inner{min-height:110px;display:flex;align-items:center;justify-content:space-between;gap:28px;padding-block:14px}
-    .gateway-logo{display:block;width:clamp(205px,24vw,262px);height:auto}
-    .crest{display:block;height:88px;width:auto}
-    h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.13;font-weight:normal}
-    .intro{background:var(--navy);color:var(--paper);border-bottom:4px solid var(--gold)}
-    .intro-inner{display:flex;justify-content:space-between;align-items:center;gap:35px;padding-block:38px 42px}
-    .intro-title{min-width:0}
-    .eyebrow{margin:0 0 7px;font-size:.74rem;font-weight:750;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
-    h1{margin:0 0 9px;font-size:clamp(2.6rem,5.2vw,4.35rem);letter-spacing:-.025em}
-    .tagline{margin:0;font:clamp(1.03rem,1.5vw,1.22rem)/1.5 Georgia,"Times New Roman",serif;color:#e5cfaa}
-    .author{font-size:.88rem;white-space:nowrap;color:#f2ede5;align-self:end;margin-bottom:6px}
+    h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.14;font-weight:normal}
+
+    /* A single uninterrupted header — no special band for the identity mark. */
+    .hero{position:relative;overflow:hidden;background:linear-gradient(112deg,#0a2d44 0%,#0d364a 57%,#155051 100%);color:var(--paper);border-bottom:3px solid var(--gold)}
+    .hero::after{content:"";position:absolute;bottom:-105px;right:-120px;width:520px;height:310px;border:1px solid rgba(232,210,175,.16);border-radius:50%;transform:rotate(-19deg);pointer-events:none}
+    .hero-inner{position:relative;min-height:266px;padding-top:36px;padding-bottom:33px;display:flex;align-items:center;z-index:1}
+    .hero-copy{position:relative;max-width:795px;padding-right:140px;z-index:1}
+    .eyebrow{color:var(--gold-light);text-transform:uppercase;font-weight:700;font-size:.75rem;letter-spacing:.22em;margin:0 0 13px}
+    h1{font-size:clamp(2.75rem,4.5vw,3.85rem);letter-spacing:-.033em;margin:0 0 11px}
+    .subtitle{font:clamp(1.08rem,1.85vw,1.36rem)/1.4 Georgia,"Times New Roman",serif;color:#f2dbb7;margin:0}
+    .author{margin:20px 0 0;font-size:.94rem;color:#f1eee6}
     .author strong{font-weight:650}
-    main{padding-block:42px 76px}
-    .collections{display:grid;grid-template-columns:1fr 1fr;gap:19px}
-    .collection{position:relative;overflow:hidden;min-height:226px;border:1px solid var(--line);background:var(--paper);padding:27px 29px 24px;display:flex;flex-direction:column;align-items:flex-start;box-shadow:0 8px 24px #102b4210}
-    .collection.active{border-top:5px solid var(--gold);text-decoration:none;transition:transform .18s,box-shadow .18s}
-    .collection.active:hover{transform:translateY(-3px);box-shadow:0 12px 28px #102b421a}
-    .collection.future{border-top:5px solid var(--teal);background:#eef0ea}
-    .collection-kicker{font-size:.71rem;font-weight:750;letter-spacing:.18em;text-transform:uppercase;color:#946929;margin-bottom:12px}
+    .emblem{position:absolute;top:20px;right:9px;width:97px;height:132px;display:flex;align-items:center;justify-content:center;isolation:isolate}
+    .emblem::before{content:"";position:absolute;inset:1px -5px 1px;background:radial-gradient(ellipse at center,rgba(255,250,239,.83) 0%,rgba(255,251,242,.59) 35%,rgba(255,251,242,.20) 60%,rgba(255,251,242,0) 78%);z-index:-1;pointer-events:none}
+    .emblem img{display:block;height:112px;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.09))}
+
+    main{padding-top:26px;padding-bottom:65px}
+    .collections{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+    .collection{min-height:192px;background:var(--paper);border:1px solid var(--line);padding:26px 30px 24px;display:flex;flex-direction:column;align-items:flex-start;box-shadow:0 6px 20px rgba(10,40,55,.045)}
+    .collection.active{border-top:4px solid var(--gold);text-decoration:none;transition:transform .18s,border-color .18s,box-shadow .18s}
+    .collection.active:hover{transform:translateY(-3px);border-color:#ceb47c;box-shadow:0 10px 26px rgba(10,40,55,.10)}
+    .collection.future{border-top:4px solid #75a3a2;background:#f1f3ed}
+    .collection-kicker{color:#956b2f;letter-spacing:.15em;font-size:.72rem;font-weight:750;text-transform:uppercase;margin-bottom:12px}
     .future .collection-kicker{color:var(--teal)}
-    h2{font-size:clamp(1.95rem,3.4vw,2.7rem);letter-spacing:-.018em;margin:0 0 12px}
-    .collection p{max-width:420px;margin:0;color:var(--muted);font-size:.94rem}
-    .collection-bottom{margin-top:auto;padding-top:22px;font-size:.84rem;font-weight:750;letter-spacing:.025em}
-    .collection.active .collection-bottom{color:#936525}
+    h2{font-size:clamp(2rem,3.4vw,2.8rem);letter-spacing:-.02em;margin:0 0 11px}
+    .collection p{font-size:.96rem;color:var(--muted);max-width:440px;margin:0}
+    .collection-bottom{margin-top:auto;padding-top:18px;color:#93652a;font-weight:700;font-size:.89rem}
     .collection.future .collection-bottom{color:var(--teal)}
-    .rule{height:1px;background:var(--line);margin:49px 0 27px}
+
+    .rule{height:1px;background:var(--line);margin:46px 0 29px}
     .catalog-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
-    .catalog-kicker{font-size:.72rem;font-weight:750;letter-spacing:.18em;text-transform:uppercase;color:#936c32;margin:0 0 6px}
-    h3{font-size:clamp(1.7rem,3.2vw,2.55rem);margin:0 0 5px}
-    .catalog-desc{margin:0;color:var(--muted);font-size:.94rem}
-    .search{width:285px;max-width:100%;min-height:46px;background:var(--paper);color:var(--ink);border:1px solid #bcae98;border-radius:3px;font:inherit;padding:10px 13px}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:24px}
-    .tile{display:flex;flex-direction:column;justify-content:space-between;gap:19px;min-height:131px;padding:19px 21px;background:var(--paper);border:1px solid var(--line);text-decoration:none;transition:transform .15s,border-color .15s}
+    .catalog-kicker{color:#916c34;font-weight:750;letter-spacing:.18em;font-size:.73rem;text-transform:uppercase;margin:0 0 6px}
+    h3{font-size:clamp(1.8rem,3.2vw,2.55rem);margin:0 0 5px}
+    .catalog-desc{margin:0;font-size:.95rem;color:var(--muted)}
+    .search{width:284px;max-width:100%;min-height:46px;padding:10px 13px;border:1px solid #bfae97;border-radius:3px;color:var(--ink);background:var(--paper);font:inherit}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:25px}
+    .tile{display:flex;flex-direction:column;justify-content:space-between;gap:17px;min-height:132px;text-decoration:none;padding:18px 21px;border:1px solid var(--line);background:var(--paper);transition:transform .15s,border-color .15s}
     .tile:hover{border-color:var(--gold);transform:translateY(-2px)}
-    .tile-top{display:flex;justify-content:space-between;font-size:.69rem;letter-spacing:.13em;font-weight:750;color:#957443}
-    .tile-name{font:1.31rem/1.3 Georgia,"Times New Roman",serif;overflow-wrap:anywhere}
-    .empty{margin:24px 0 0;padding:22px 24px;border:1px dashed #c8bba7;background:var(--paper);color:var(--muted);font-size:.96rem}
+    .tile-top{display:flex;justify-content:space-between;color:#947446;font-size:.68rem;font-weight:750;letter-spacing:.13em}
+    .tile-name{font:1.29rem/1.32 Georgia,"Times New Roman",serif;overflow-wrap:anywhere}
+    .empty{margin:23px 0 0;padding:22px 24px;background:var(--paper);border:1px dashed #c9bca9;color:var(--muted)}
     .notice{margin-top:18px;color:var(--muted)}
+
     footer{background:var(--navy);color:var(--paper);border-top:3px solid var(--gold)}
-    .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:22px;padding-block:29px}
-    .footer-primary{display:flex;flex-direction:column;gap:3px;font-size:.88rem}
-    .footer-primary strong{font:1.35rem Georgia,"Times New Roman",serif;margin-bottom:2px}
-    .footer-secondary{text-align:right;display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+    .footer-inner{padding-block:28px;display:flex;justify-content:space-between;align-items:center;gap:25px}
+    .footer-primary{display:flex;flex-direction:column;gap:3px;font-size:.87rem}
+    .footer-primary strong{font:1.27rem Georgia,"Times New Roman",serif;margin-bottom:2px}
+    .footer-secondary{text-align:right;display:flex;flex-direction:column;gap:5px;font-size:.84rem}
     footer a{color:var(--gold-light);text-decoration:none}
     footer a:hover{text-decoration:underline}
-    .credit{font-size:.77rem;opacity:.79}
-    @media(max-width:760px){.intro-inner{align-items:flex-start;flex-direction:column;gap:10px;padding-block:32px}.author{align-self:auto;margin:0}.collections{grid-template-columns:1fr}.collection{min-height:190px}.catalog-heading{align-items:stretch;flex-direction:column}.search{width:100%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:540px){.wrap{width:calc(100% - 34px)}.masthead-inner{min-height:83px;gap:13px;padding-block:8px}.gateway-logo{width:clamp(174px,56vw,218px)}.crest{height:72px}.intro-inner{padding-block:28px 31px}h1{font-size:clamp(2.45rem,9.3vw,3.1rem)}main{padding-block:25px 58px}.collection{padding:21px 22px;min-height:186px}.rule{margin:37px 0 25px}.grid{grid-template-columns:1fr}.tile{min-height:111px}.footer-inner{flex-direction:column;align-items:flex-start;gap:19px}.footer-secondary{text-align:left}}
+    .credit{font-size:.77rem;color:#d6dee0}
+
+    @media(max-width:760px){
+      .hero-inner{min-height:265px;padding-top:40px;padding-bottom:35px}
+      .hero-copy{padding-right:108px}
+      .emblem{right:1px;top:20px;width:86px;height:117px}
+      .emblem img{height:103px}
+      h1{font-size:clamp(2.8rem,6.6vw,3.65rem)}
+      .collections{grid-template-columns:1fr}
+      .collection{min-height:188px}
+      .catalog-heading{align-items:stretch;flex-direction:column}
+      .search{width:100%}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:540px){
+      .wrap{width:calc(100% - 34px)}
+      .hero-inner{min-height:289px;align-items:flex-end;padding-top:105px;padding-bottom:28px}
+      .hero-copy{padding-right:0;max-width:none}
+      .eyebrow{margin-bottom:9px;font-size:.68rem}
+      .emblem{top:9px;right:1px;width:70px;height:94px}
+      .emblem img{height:81px}
+      .emblem::before{inset:-3px -6px -3px}
+      h1{max-width:300px;font-size:clamp(2.4rem,9vw,3.25rem);margin-bottom:8px}
+      .subtitle{max-width:280px;font-size:1.03rem}
+      .author{margin-top:18px;font-size:.87rem}
+      main{padding-top:20px;padding-bottom:55px}
+      .collection{min-height:188px;padding:23px 23px 22px}
+      .rule{margin:37px 0 24px}
+      .grid{grid-template-columns:1fr}
+      .tile{min-height:107px}
+      .footer-inner{flex-direction:column;align-items:flex-start;gap:19px}
+      .footer-secondary{text-align:left}
+    }
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.collection.active,.tile{transition:none}}
   </style>
 </head>
 <body>
-  <header class="masthead">
-    <div class="wrap masthead-inner">
-      <a href="#top" aria-label="Gateway Interactive homepage"><img class="gateway-logo" src="{{ '/gateway-logo.png' | relative_url }}" alt="Gateway logo: an open doorway and a path"></a>
-      <img class="crest" src="{{ '/glohima-crest.png' | relative_url }}" alt="Glohima logo and crest">
+  <header class="hero" id="top">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">English for all seasons</p>
+        <h1>Gateway Interactive</h1>
+        <p class="subtitle">Interactive Activities &amp; Games</p>
+        <p class="author">By <strong>Gloria Hidalgo-Machirant</strong></p>
+      </div>
+      <div class="emblem">
+        <img src="{{ '/glohima-crest.png' | relative_url }}" alt="Glohima logo and crest">
+      </div>
     </div>
   </header>
-
-  <section class="intro" id="top" aria-labelledby="page-title">
-    <div class="wrap intro-inner">
-      <div class="intro-title">
-        <p class="eyebrow">English for all seasons</p>
-        <h1 id="page-title">Gateway Interactive</h1>
-        <p class="tagline">Interactive Activities &amp; Games</p>
-      </div>
-      <p class="author">By <strong>Gloria Hidalgo-Machirant</strong></p>
-    </div>
-  </section>
 
   <main class="wrap">
     <nav class="collections" aria-label="Gateway Interactive collections">
       <a class="collection active" href="#activities">
         <span class="collection-kicker">01 / Available now</span>
         <h2>Interactive Activities</h2>
-        <p>Independent language practice. Choose an activity and work directly in your browser.</p>
+        <p>Independent English practice. Choose an activity and work directly in your browser.</p>
         <span class="collection-bottom">Explore activities <span aria-hidden="true">↗</span></span>
       </a>
       <div class="collection future" aria-label="Interactive Games, coming later">
         <span class="collection-kicker">02 / Coming later</span>
         <h2>Interactive Games</h2>
-        <p>Language challenges, simulations and games built around interaction and decisions.</p>
+        <p>Language challenges, simulations and games built around communication and decisions.</p>
         <span class="collection-bottom">Coming soon</span>
       </div>
     </nav>
@@ -115,7 +151,7 @@ layout: null
         <div>
           <p class="catalog-kicker">Explore the collection</p>
           <h3 id="activities-heading">Interactive Activities</h3>
-          <p class="catalog-desc">Open an activity to use it full-screen.</p>
+          <p class="catalog-desc">Open an activity to work full-screen.</p>
         </div>
         <input id="activity-search" class="search" type="search" aria-label="Search activities" placeholder="Find an activity…">
       </div>
