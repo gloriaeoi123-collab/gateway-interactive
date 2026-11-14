@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stress Pattern Match</title>
+<style>
+  :root{
+    --navy:#0d2b52;
+    --teal:#157a8a;
+    --teal-2:#1f9bb0;
+    --gold:#e2b33b;
+    --cream:#fbfaf6;
+    --soft:#eef5f7;
+    --green:#eaf7ef;
+    --red:#b43a3a;
+    --shadow:0 10px 24px rgba(13,43,82,.10);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(180deg,#fdfcf8 0%,#f7fbfd 100%);
+    color:var(--navy);
+  }
+  .wrap{
+    max-width:1300px;
+    margin:0 auto;
+    padding:24px;
+  }
+  .hero{
+    background:var(--navy);
+    color:#fff;
+    border-radius:24px;
+    padding:24px 28px;
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+  }
+  .hero h1{
+    margin:0 0 8px 0;
+    font-size:clamp(34px, 5vw, 62px);
+    line-height:1;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+  }
+  .hero h1 span{color:var(--gold)}
+  .hero p{
+    margin:0;
+    font-size:clamp(18px, 2vw, 28px);
+    font-weight:700;
+  }
+  .instructions{
+    background:#fff;
+    border:3px solid #d9e7ec;
+    border-radius:20px;
+    padding:16px 18px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+  }
+  .instructions p{margin:6px 0; font-size:20px; line-height:1.35}
+  .legend{
+    display:flex; gap:18px; flex-wrap:wrap; align-items:center; margin-top:10px; font-size:19px; font-weight:700;
+  }
+  .dot{display:inline-block; width:20px; height:20px; border-radius:50%; vertical-align:middle; margin-right:6px; transform:translateY(-1px)}
+  .dot.strong{background:var(--navy)}
+  .dot.weak{background:#fff; border:3px solid var(--navy)}
+
+  .layout{
+    display:grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap:22px;
+    align-items:start;
+  }
+  .panel{
+    background:#fff;
+    border:3px solid #dce8ec;
+    border-radius:22px;
+    padding:18px;
+    box-shadow:var(--shadow);
+  }
+  .panel h2{
+    margin:0 0 14px 0;
+    font-size:32px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .subtitle{
+    font-size:18px;
+    color:#35516d;
+    margin: -6px 0 14px 0;
+    line-height:1.35;
+  }
+  .phrase-list{
+    display:grid;
+    gap:12px;
+  }
+  .phrase{
+    display:grid;
+    grid-template-columns:60px 1fr;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    text-align:left;
+    border:3px solid #87c3cb;
+    border-radius:18px;
+    background:#fff;
+    padding:10px 14px;
+    font-size:clamp(24px, 2.2vw, 30px);
+    font-weight:800;
+    color:var(--navy);
+    cursor:pointer;
+    transition:.18s transform,.18s box-shadow,.18s background,.18s border-color;
+  }
+  .phrase:hover{transform:translateY(-1px); box-shadow:0 6px 14px rgba(13,43,82,.08)}
+  .phrase.selected{border-color:var(--gold); background:#fff9e8; box-shadow:0 0 0 4px rgba(226,179,59,.18)}
+  .phrase.matched{background:#eef8f1; border-color:#62b17b; cursor:default; opacity:.9}
+  .num{
+    width:42px; height:42px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(180deg,#1a97a8,#157a8a); color:#fff; font-size:24px; font-weight:900;
+  }
+  .patterns{
+    display:grid;
+    gap:16px;
+  }
+  .pattern{
+    border:3px solid #e7c466;
+    border-radius:20px;
+    background:#fffef8;
+    padding:14px 16px;
+    cursor:pointer;
+    transition:.18s transform,.18s box-shadow,.18s background,.18s border-color;
+  }
+  .pattern:hover{transform:translateY(-1px); box-shadow:0 6px 14px rgba(13,43,82,.08)}
+  .pattern.selected{border-color:var(--gold); background:#fff8e6; box-shadow:0 0 0 4px rgba(226,179,59,.18)}
+  .pattern-top{display:flex; align-items:center; gap:14px; margin-bottom:10px; flex-wrap:wrap}
+  .badge{
+    width:56px; height:56px; border-radius:50%; background:var(--gold); color:var(--navy); display:grid; place-items:center; font-size:38px; font-weight:900;
+  }
+  .symbol-row{display:flex; align-items:center; gap:16px; font-size:30px; font-weight:800; flex-wrap:wrap}
+  .symbol-group{display:flex; align-items:center; gap:10px}
+  .symbol-row small{font-size:18px; font-weight:700; color:#35516d}
+  .pattern-desc{font-size:18px; color:#2f4a67; margin-bottom:10px}
+  .match-slot{
+    min-height:56px;
+    border:2px dashed #b7ced5;
+    border-radius:14px;
+    background:#fbfdfe;
+    padding:8px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--green);
+    border:2px solid #7bc08f;
+    border-radius:999px;
+    padding:7px 12px;
+    font-size:20px;
+    font-weight:800;
+    color:var(--navy);
+  }
+  .chip span:first-child{
+    width:28px; height:28px; border-radius:50%; background:#4aa366; color:#fff; display:grid; place-items:center; font-size:18px;
+  }
+  .revealed{
+    margin-top:12px;
+    border-radius:14px;
+    background:#f1f8e8;
+    border:2px solid #9bc567;
+    padding:12px;
+    display:none;
+  }
+  .revealed.show{display:block}
+  .revealed strong{font-size:28px; color:#406411}
+  .controls{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:18px;
+  }
+  button.ctrl{
+    border:none; border-radius:14px; background:var(--navy); color:#fff; padding:12px 16px; font-size:18px; font-weight:800; cursor:pointer;
+  }
+  button.ctrl.secondary{background:#607d8b}
+  .message{
+    margin-top:16px;
+    min-height:68px;
+    border-radius:16px;
+    padding:14px 16px;
+    font-size:22px;
+    font-weight:800;
+    line-height:1.35;
+    display:flex;
+    align-items:center;
+  }
+  .message.info{background:#eef5ff; color:#163b6b; border:2px solid #b8d0f0}
+  .message.good{background:#ebf8ef; color:#195a2d; border:2px solid #95d2a8}
+  .message.bad{background:#fff1f1; color:#8a1f1f; border:2px solid #efb0b0}
+
+  .footer-panel{
+    margin-top:22px;
+    background:#fff;
+    border:3px solid #ead6d6;
+    border-radius:22px;
+    padding:18px;
+    box-shadow:var(--shadow);
+  }
+  .code-row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:10px 0 8px}
+  .code-box{
+    width:86px; height:86px; border-radius:16px; display:grid; place-items:center; font-size:44px; font-weight:900; border:3px dashed #b6c7d2; background:#f9fbfc; color:#9cb1bd;
+  }
+  .code-box.done{border-style:solid; border-color:#94c66b; background:#f2f9e9; color:#355f0f}
+  .success{
+    display:none;
+    margin-top:14px;
+    background:#f8fbeb;
+    border:3px solid #abc86a;
+    border-radius:18px;
+    padding:16px;
+  }
+  .success.show{display:block}
+  .success h3{margin:0 0 8px 0; font-size:34px; color:#365d12}
+  .success p{margin:0; font-size:22px; line-height:1.4}
+
+  .small-note{font-size:17px; color:#47627a; line-height:1.4}
+
+  @media (max-width: 980px){
+    .layout{grid-template-columns:1fr}
+  }
+  @media (max-width: 620px){
+    .wrap{padding:14px}
+    .phrase{font-size:24px; grid-template-columns:52px 1fr}
+    .num{width:36px; height:36px; font-size:20px}
+    .badge{width:48px; height:48px; font-size:30px}
+    .panel h2{font-size:28px}
+    .instructions p{font-size:18px}
+    .message{font-size:19px}
+    .code-box{width:72px; height:72px; font-size:38px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>Stress Pattern <span>Match</span></h1>
+    <p>Say the phrase aloud. Match it to the rhythm pattern.</p>
+  </div>
+
+  <div class="instructions">
+    <p><strong>How to play:</strong> Click <strong>one phrase</strong> on the left. Then click the <strong>matching rhythm pattern</strong> on the right.</p>
+    <p>Each pattern has <strong>two matching phrases</strong>. The phrases and patterns are <strong>shuffled automatically</strong>. When you complete a pattern, you reveal <strong>one letter</strong>. Complete all four patterns to uncover the final word.</p>
+    <div class="legend">
+      <span><span class="dot strong"></span> = STRONG</span>
+      <span><span class="dot weak"></span> = weak</span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>1. Phrases</h2>
+      <p class="subtitle">Focus on the rhythm of the whole chunk, not on spelling. Say each phrase aloud before you match it.</p>
+      <div class="phrase-list" id="phraseList"></div>
+    </section>
+
+    <section class="panel">
+      <h2>2. Rhythm patterns</h2>
+      <p class="subtitle">Choose the pattern that matches the <strong>strong / weak</strong> rhythm of the phrase.</p>
+      <div class="patterns" id="patternList"></div>
+      <div class="controls">
+        <button class="ctrl" id="resetBtn">Reset activity</button>
+        <button class="ctrl secondary" id="shuffleBtn">Shuffle</button>
+        <button class="ctrl secondary" id="clearSelectionBtn">Clear selection</button>
+      </div>
+      <div class="message info" id="message">Select a phrase, then select a pattern.</div>
+    </section>
+  </div>
+
+  <section class="footer-panel">
+    <h2 style="margin-bottom:10px">3. Final code</h2>
+    <p class="subtitle">Each completed pattern reveals one letter. When all patterns are complete, read the final word.</p>
+    <div class="code-row" id="codeRow"></div>
+    <div class="success" id="successBox">
+      <h3>You found the word: BEAT</h3>
+      <p><strong>Well done.</strong> In spoken English, listen for the <strong>beat</strong>: the strong parts, the weak parts, and the pattern they create.</p>
+    </div>
+    <p class="small-note"><strong>Teacher note:</strong> This page is self-correcting. Wrong matches get immediate feedback. Correct matches are locked in place and reveal the hidden code step by step.</p>
+  </section>
+</div>
+
+<script>
+const phrases = [
+  {id:1, text:'call me back', pattern:'A'},
+  {id:2, text:'take a seat', pattern:'A'},
+  {id:3, text:'where are the keys?', pattern:'B'},
+  {id:4, text:'turn on the light', pattern:'B'},
+  {id:5, text:'go and see me', pattern:'C'},
+  {id:6, text:'come and help us', pattern:'C'},
+  {id:7, text:'in town all day', pattern:'D'},
+  {id:8, text:'at work on time', pattern:'D'}
+];
+
+const patterns = [
+  {id:'A', symbols:['strong','weak','strong'], labels:['STRONG','weak','STRONG'], desc:'Pattern A = strong – weak – strong', reveal:'B'},
+  {id:'B', symbols:['strong','weak','weak','strong'], labels:['STRONG','weak','weak','STRONG'], desc:'Pattern B = strong – weak – weak – strong', reveal:'E'},
+  {id:'C', symbols:['strong','weak','strong','weak'], labels:['STRONG','weak','STRONG','weak'], desc:'Pattern C = strong – weak – strong – weak', reveal:'A'},
+  {id:'D', symbols:['weak','strong','weak','strong'], labels:['weak','STRONG','weak','STRONG'], desc:'Pattern D = weak – strong – weak – strong', reveal:'T'}
+];
+
+let selectedPhraseId = null;
+let selectedPatternId = null;
+let matched = {}; // phraseId -> patternId
+let slots = {A:[], B:[], C:[], D:[]};
+let revealed = {A:false, B:false, C:false, D:false};
+let phraseOrder = [];
+let patternOrder = [];
+
+function shuffledCopy(arr){
+  const copy = [...arr];
+  for(let i = copy.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function shuffleBoard(){
+  phraseOrder = shuffledCopy(phrases.map(p => p.id));
+  patternOrder = shuffledCopy(patterns.map(p => p.id));
+}
+
+const phraseList = document.getElementById('phraseList');
+const patternList = document.getElementById('patternList');
+const messageBox = document.getElementById('message');
+const codeRow = document.getElementById('codeRow');
+const successBox = document.getElementById('successBox');
+
+document.getElementById('resetBtn').addEventListener('click', resetActivity);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleActivity);
+document.getElementById('clearSelectionBtn').addEventListener('click', clearSelection);
+
+function render(){
+  renderPhrases();
+  renderPatterns();
+  renderCode();
+  updateSuccess();
+}
+
+function renderPhrases(){
+  phraseList.innerHTML = '';
+  phraseOrder.map(id => phrases.find(p => p.id === id)).forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'phrase';
+    if(selectedPhraseId === p.id) btn.classList.add('selected');
+    if(matched[p.id]) btn.classList.add('matched');
+    btn.disabled = !!matched[p.id];
+    btn.innerHTML = `<span class="num">${p.id}</span><span>${p.text}</span>`;
+    btn.addEventListener('click', () => {
+      if(matched[p.id]) return;
+      selectedPhraseId = p.id;
+      setMessage('Phrase selected: “' + p.text + '”. Now choose a pattern.', 'info');
+      render();
+    });
+    phraseList.appendChild(btn);
+  });
+}
+
+function renderPatterns(){
+  patternList.innerHTML = '';
+  patternOrder.map(id => patterns.find(p => p.id === id)).forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'pattern';
+    if(selectedPatternId === p.id) card.classList.add('selected');
+    card.addEventListener('click', () => {
+      selectedPatternId = p.id;
+      if(selectedPhraseId == null){
+        setMessage('Pattern ' + p.id + ' selected. Now choose a phrase.', 'info');
+        render();
+        return;
+      }
+      tryMatch();
+    });
+
+    const symbolsHtml = p.symbols.map((sym, i) => `
+      <span class="symbol-group">
+        <span class="dot ${sym}"></span>
+        <small>${p.labels[i]}</small>
+      </span>`).join('');
+
+    const slotHtml = slots[p.id].map(id => {
+      const phrase = phrases.find(x => x.id === id);
+      return `<span class="chip"><span>${id}</span>${phrase.text}</span>`;
+    }).join('');
+
+    const revealHtml = revealed[p.id]
+      ? `<div class="revealed show">Letter revealed: <strong>${p.reveal}</strong></div>`
+      : `<div class="revealed">Letter revealed: <strong>${p.reveal}</strong></div>`;
+
+    card.innerHTML = `
+      <div class="pattern-top">
+        <div class="badge">${p.id}</div>
+        <div class="symbol-row">${symbolsHtml}</div>
+      </div>
+      <div class="pattern-desc">${p.desc}</div>
+      <div class="match-slot">${slotHtml}</div>
+      ${revealHtml}
+    `;
+    patternList.appendChild(card);
+  });
+}
+
+function renderCode(){
+  codeRow.innerHTML = '';
+  patterns.forEach(p => {
+    const box = document.createElement('div');
+    box.className = 'code-box' + (revealed[p.id] ? ' done' : '');
+    box.textContent = revealed[p.id] ? p.reveal : '•';
+    codeRow.appendChild(box);
+  });
+}
+
+function tryMatch(){
+  const phrase = phrases.find(p => p.id === selectedPhraseId);
+  const pattern = patterns.find(p => p.id === selectedPatternId);
+  if(!phrase || !pattern) return;
+
+  if(slots[pattern.id].length >= 2){
+    setMessage('Pattern ' + pattern.id + ' already has two phrases. Choose another pattern.', 'bad');
+    selectedPatternId = null;
+    render();
+    return;
+  }
+
+  if(phrase.pattern === pattern.id){
+    matched[phrase.id] = pattern.id;
+    slots[pattern.id].push(phrase.id);
+    if(slots[pattern.id].length === 2){
+      revealed[pattern.id] = true;
+      setMessage('Correct. Pattern ' + pattern.id + ' is complete. You revealed the letter “' + pattern.reveal + '”.', 'good');
+    } else {
+      setMessage('Correct. Phrase matched with pattern ' + pattern.id + '.', 'good');
+    }
+  } else {
+    setMessage('Not quite. Try saying the phrase aloud again and listen for the strong / weak rhythm.', 'bad');
+  }
+
+  selectedPhraseId = null;
+  selectedPatternId = null;
+  render();
+}
+
+function clearSelection(){
+  selectedPhraseId = null;
+  selectedPatternId = null;
+  setMessage('Selection cleared. Select a phrase, then select a pattern.', 'info');
+  render();
+}
+
+function shuffleActivity(){
+  if(Object.keys(matched).length > 0){
+    // Keep completed matches, but reshuffle the remaining visual order.
+    phraseOrder = shuffledCopy(phraseOrder);
+    patternOrder = shuffledCopy(patternOrder);
+  } else {
+    shuffleBoard();
+  }
+  selectedPhraseId = null;
+  selectedPatternId = null;
+  setMessage('Board shuffled. Select a phrase, then select a pattern.', 'info');
+  render();
+}
+
+function resetActivity(){
+  selectedPhraseId = null;
+  selectedPatternId = null;
+  matched = {};
+  slots = {A:[], B:[], C:[], D:[]};
+  revealed = {A:false, B:false, C:false, D:false};
+  shuffleBoard();
+  setMessage('Activity reset and reshuffled. Select a phrase, then select a pattern.', 'info');
+  render();
+}
+
+function updateSuccess(){
+  const done = Object.values(revealed).every(v => v === true);
+  successBox.classList.toggle('show', done);
+}
+
+function setMessage(text, type){
+  messageBox.textContent = text;
+  messageBox.className = 'message ' + type;
+}
+
+shuffleBoard();
+render();
+</script>
+</body>
+</html>

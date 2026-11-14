@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gateway On-Demand | Grammar Transfers: Tourism and City Life</title>
+<style>
+:root{
+  --navy:#073b4c; --teal:#0b6f75; --gold:#c89b2b; --cream:#f7f2e8;
+  --ink:#17313a; --green:#2e7d32; --red:#b3261e; --soft:#eef3f2; --line:#d6dede;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--soft);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+header{background:var(--navy);color:white;padding:20px}
+header .inner,main{max-width:1000px;margin:auto}
+h1{margin:0;font-size:clamp(26px,4vw,40px)}
+.sub{margin-top:5px;color:#f2d16f;font-weight:700}
+main{padding:20px 14px 50px}
+.card{
+  background:white;border-radius:14px;padding:20px;margin:18px 0;
+  box-shadow:0 2px 12px #0001;border-top:6px solid var(--teal)
+}
+.band{display:inline-block;background:#f2cc46;padding:5px 10px;border-radius:8px;font-weight:700}
+.models{display:grid;gap:10px;margin-top:14px}
+.model{
+  border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fbfcfc
+}
+.model strong{
+  display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
+  border-radius:50%;background:var(--gold);color:#223944;margin-right:8px
+}
+.transfer{
+  border-left:5px solid var(--gold);background:#fff9e9;border-radius:9px;
+  padding:15px;margin-top:14px
+}
+.transfer .es{font-size:1.12rem;font-weight:700}
+.step{margin-top:18px}
+.step h3{margin:0 0 8px;color:var(--navy)}
+select,input{
+  width:100%;padding:11px 12px;border:2px solid #aebabc;border-radius:8px;
+  font-size:1rem;background:white;color:var(--ink)
+}
+button{
+  border:0;border-radius:8px;padding:10px 14px;font-size:1rem;
+  font-weight:700;cursor:pointer;margin-top:9px
+}
+.check{background:var(--navy);color:white}
+.showkey{background:var(--gold);color:#263d49}
+.next{background:var(--teal);color:white;display:none}
+.feedback{min-height:27px;margin-top:8px;font-weight:700}
+.good{color:var(--green)} .bad{color:var(--red)}
+.structure{
+  display:none;margin-top:12px;padding:12px 14px;background:#eaf5ed;
+  border:2px solid #8bb799;border-radius:9px
+}
+.structure code{
+  font-family:Arial,Helvetica,sans-serif;font-weight:700;color:var(--navy)
+}
+.progress-wrap{height:10px;background:#dce5e5;border-radius:20px;overflow:hidden;margin-top:14px}
+.progress{height:100%;width:0;background:var(--teal);transition:.25s}
+.counter{margin-top:7px;color:#607176;font-size:.92rem}
+.finish{
+  display:none;background:#eaf5ed;border:2px solid #86b493;
+  border-radius:10px;padding:16px;margin-top:16px
+}
+.note{color:#5d6c70}
+</style>
+</head>
+<body>
+<header>
+<div class="inner">
+  <div style="font-size:.78rem;letter-spacing:.08em;font-weight:700">GATEWAY · ON-DEMAND · GRAMMAR TRANSFERS</div>
+  <h1>Find the Pattern. Transfer It.</h1>
+  <div class="sub">MB · Tourism and City Life</div>
+</div>
+</header>
+
+<main>
+<section class="card">
+  <span class="band">GRAMMAR</span>
+  <p>You have five model sentences from the reading. For each Spanish transfer, decide which model gives you the grammatical pattern you need and use that pattern to create a new English sentence.</p>
+  <p class="note">The Spanish wording is deliberately different from the model. Do not translate word for word. The checker evaluates the <strong>target grammatical pattern</strong>, not whether you guessed one pre-programmed wording.</p>
+
+  <div class="models">
+    <div class="model"><strong>A</strong> Tourism has become an important part of the economy of many cities.</div>
+    <div class="model"><strong>B</strong> Can tourism begin to damage the very place that makes people want to visit it?</div>
+    <div class="model"><strong>C</strong> Homes may be converted into short-term accommodation.</div>
+    <div class="model"><strong>D</strong> Their own city is being reorganised around somebody else’s needs.</div>
+    <div class="model"><strong>E</strong> Cities should continue to welcome visitors while placing reasonable limits on the changes tourism is allowed to cause.</div>
+  </div>
+</section>
+
+<section class="card">
+  <div id="transferBox"></div>
+
+  <div class="step">
+    <h3>Build the new sentence</h3>
+    <input id="sentenceInput" type="text" autocomplete="off" placeholder="Write the complete English sentence">
+    <button class="check" id="checkSentence">Check sentence</button>
+    <button class="showkey" id="showKey">Show key</button>
+    <div class="feedback" id="sentenceFeedback"></div>
+    <div class="structure" id="structureBox"></div>
+    <button class="next" id="nextBtn">Next transfer</button>
+  </div>
+
+  <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+  <div class="counter" id="counter"></div>
+
+  <div class="finish" id="finish">
+    <strong>✓ Finished.</strong><br>
+    You matched five new meanings to five grammatical patterns from the reading and reused those patterns in new sentences.
+  </div>
+</section>
+</main>
+
+<script>
+const tasks = [
+  {
+    spanish:"Es posible que algunos edificios públicos se conviertan en hoteles.",
+    key:"Some public buildings may be converted into hotels.",
+    patternText:"Model C → may + be + past participle",
+    validate:(x)=>{
+      const v=norm(x);
+      return /\bmay\s+be\s+[a-z]+(?:ed|en)\b/.test(v);
+    }
+  },
+  {
+    spanish:"Los ayuntamientos deberían seguir atrayendo inversión y, al mismo tiempo, poner límites a los alquileres turísticos.",
+    key:"Local authorities should continue to attract investment while placing limits on holiday rentals.",
+    patternText:"Model E → should continue (to) + verb ... while + -ing",
+    validate:(x)=>{
+      const v=norm(x);
+      return /\bshould\s+continue(?:\s+to)?\s+[a-z]+\b/.test(v)
+        && /\bwhile\s+[a-z]+ing\b/.test(v);
+    }
+  },
+  {
+    spanish:"En la última década, el alquiler turístico se ha convertido en una importante fuente de ingresos para muchas familias.",
+    key:"Over the last decade, holiday letting has become an important source of income for many families.",
+    patternText:"Model A → has/have + past participle",
+    validate:(x)=>{
+      const v=norm(x);
+      return /\b(has|have)\s+become\b/.test(v);
+    }
+  },
+  {
+    spanish:"El paseo marítimo no se está reorganizando pensando en los residentes.",
+    key:"The seafront is not being reorganised with residents in mind.",
+    patternText:"Model D → is/are + not + being + past participle",
+    validate:(x)=>{
+      const v=norm(x);
+      return /\b(is|are)\s+not\s+being\s+[a-z]+(?:ed|en)\b/.test(v);
+    }
+  },
+  {
+    spanish:"¿Puede la vida local empezar a verse perjudicada si el centro se orienta cada vez más a los turistas?",
+    key:"Can local life begin to suffer if the city centre is increasingly geared towards tourists?",
+    patternText:"Model B → Can + subject + begin to + verb ... ?",
+    validate:(x)=>{
+      const v=norm(x);
+      return /^can\s+.+\s+begin\s+to\s+[a-z]+\b/.test(v);
+    }
+  }
+]
+
+let index=0;
+let sentenceCorrect=false;
+
+const transferBox=document.getElementById("transferBox");
+const sentenceInput=document.getElementById("sentenceInput");
+const sentenceFeedback=document.getElementById("sentenceFeedback");
+const structureBox=document.getElementById("structureBox");
+const nextBtn=document.getElementById("nextBtn");
+const progress=document.getElementById("progress");
+const counter=document.getElementById("counter");
+const finish=document.getElementById("finish");
+
+function norm(s){
+  return String(s).toLowerCase().trim()
+    .replace(/[’]/g,"'")
+    .replace(/\bcentre\b/g,"center")
+    .replace(/\btowards\b/g,"toward")
+    .replace(/\breorganised\b/g,"reorganized")
+    .replace(/[.,!?;:]+$/g,"")
+    .replace(/\s+/g," ");
+}
+
+function load(){
+  const t=tasks[index];
+  sentenceCorrect=false;
+  transferBox.innerHTML=`<div class="transfer"><div style="font-size:.8rem;font-weight:700;color:#7b672e">TRANSFER ${index+1}</div><div class="es">${t.spanish}</div></div>`;
+  sentenceInput.value="";
+  sentenceFeedback.textContent="";
+  sentenceFeedback.className="feedback";
+  structureBox.style.display="none";
+  structureBox.innerHTML="";
+  nextBtn.style.display="none";
+  progress.style.width=`${(index/tasks.length)*100}%`;
+  counter.textContent=`Transfer ${index+1} of ${tasks.length}`;
+}
+
+
+
+document.getElementById("checkSentence").addEventListener("click",()=>{
+  const t=tasks[index];
+  const got=sentenceInput.value.trim();
+  if(!got){
+    sentenceFeedback.className="feedback bad";
+    sentenceFeedback.textContent="Write a sentence first.";
+    return;
+  }
+
+  if(t.validate(got)){
+    sentenceCorrect=true;
+    sentenceFeedback.className="feedback good";
+    sentenceFeedback.textContent="✓ The target grammatical pattern is correct. Your wording may differ from the model answer.";
+    structureBox.innerHTML=t.patternText;
+    structureBox.style.display="block";
+    nextBtn.style.display="inline-block";
+  }else{
+    sentenceCorrect=false;
+    sentenceFeedback.className="feedback bad";
+    sentenceFeedback.textContent="The target grammatical pattern is not in place yet. Check the model above or use “Show key”.";
+    structureBox.style.display="none";
+    nextBtn.style.display="none";
+  }
+});
+
+
+document.getElementById("showKey").addEventListener("click",()=>{
+  const t=tasks[index];
+  sentenceInput.value=t.key;
+  sentenceFeedback.className="feedback good";
+  sentenceFeedback.textContent="One possible answer is shown. Other natural answers are possible.";
+  structureBox.innerHTML=t.patternText;
+  structureBox.style.display="block";
+  nextBtn.style.display="inline-block";
+});
+
+sentenceInput.addEventListener("keydown",e=>{
+  if(e.key==="Enter") document.getElementById("checkSentence").click();
+});
+
+nextBtn.addEventListener("click",()=>{
+  if(index<tasks.length-1){
+    index++;
+    load();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }else{
+    progress.style.width="100%";
+    counter.textContent="Completed";
+    transferBox.style.display="none";
+    document.querySelectorAll(".step").forEach(x=>x.style.display="none");
+    finish.style.display="block";
+  }
+});
+
+load();
+</script>
+</body>
+</html>

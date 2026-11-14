@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gateway Nominalisation Lab — Sentence 1</title>
+<style>
+:root{--navy:#073b4c;--teal:#0b6f75;--gold:#c89b2b;--ink:#17313a;--green:#2e7d32;--red:#b3261e;--soft:#eef3f2;--line:#d7dfdf}
+*{box-sizing:border-box}
+body{margin:0;background:var(--soft);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+header{background:var(--navy);color:#fff;padding:20px}
+header .inner,main{max-width:900px;margin:auto}
+h1{margin:0;font-size:clamp(27px,4vw,40px)}
+.sub{margin-top:5px;color:#f2d16f;font-weight:700}
+main{padding:20px 14px 50px}
+.card{background:#fff;border-radius:14px;padding:20px;margin:18px 0;box-shadow:0 2px 12px #0001;border-top:6px solid var(--teal)}
+.principle{background:#fff8e4;border-left:5px solid var(--gold);padding:14px 16px;border-radius:9px;margin-bottom:16px}
+.source{font-size:1.16rem;font-weight:700;background:#fbfcfc;border:1px solid var(--line);border-radius:10px;padding:16px}
+.stage{margin-top:22px;border-top:1px solid #e3e8e8;padding-top:18px}
+.stage h2{margin:0 0 8px;color:var(--navy);font-size:1.22rem}
+.options{display:grid;gap:9px;margin-top:12px}
+.option{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fbfcfc}
+.option input{margin-top:4px}
+.nom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.nom-grid label{font-weight:700}
+input[type=text],textarea{width:100%;padding:10px 11px;border:2px solid #b2bfc1;border-radius:8px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+button{border:0;border-radius:8px;padding:10px 14px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:9px;margin-right:6px}
+.primary{background:var(--navy);color:#fff}
+.secondary{background:var(--gold);color:#263d49}
+.feedback{min-height:27px;margin-top:8px;font-weight:700}
+.good{color:var(--green)} .bad{color:var(--red)}
+.hidden{display:none}
+.key{display:none;margin-top:12px;background:#e9f5ed;border:2px solid #8bb799;border-radius:9px;padding:13px}
+.note{font-size:.92rem;color:#5e6e73}
+@media(max-width:680px){.nom-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<div class="inner">
+  <div style="font-size:.78rem;letter-spacing:.08em;font-weight:700">GATEWAY · UPGRADING LAB · NOMINALISATION</div>
+  <h1>Sentence 1: Selective Compression</h1>
+  <div class="sub">HB · C1</div>
+</div>
+</header>
+
+<main>
+<section class="card">
+  <div class="principle">
+    <strong>Nominalise the event, action or process you want to make the “thing” the new sentence is organised around.</strong><br><br>
+    The aim is not to nominalise everything that <em>can</em> be nominalised. Choose what <strong>should</strong> be nominalised to make the sentence more compact and controlled without making it overwhelmingly complex.
+    <br><br>
+    There may be other parts of the sentence that <em>could</em> also be nominalised, but that does not mean they should be used in this particular rewrite.
+    <br><br>
+    <strong>Reusable strategy:</strong><br>
+    1. Find the main relationship in the sentence.<br>
+    2. Identify the events that carry that relationship.<br>
+    3. Nominalise those events.<br>
+    4. Keep supporting or detail information in whatever form makes the sentence clearest.
+  </div>
+
+  <div class="source">
+    The company admitted that it had misled customers, and investors immediately lost confidence in it.
+  </div>
+
+  <div class="stage" id="stage1">
+    <h2>1 · What SHOULD be nominalised here?</h2>
+    <p class="note">Choose the ideas that should become the main concepts around which the new sentence is organised.</p>
+
+    <div class="options">
+      <label class="option"><input type="checkbox" value="admitted"> <span><strong>admitted</strong></span></label>
+      <label class="option"><input type="checkbox" value="misled"> <span><strong>had misled customers</strong></span></label>
+      <label class="option"><input type="checkbox" value="loss"> <span><strong>lost confidence</strong></span></label>
+    </div>
+
+    <button class="primary" id="checkChoice">Check choice</button>
+    <div class="feedback" id="choiceFb"></div>
+  </div>
+
+  <div class="stage hidden" id="stage2">
+    <h2>2 · Nominalise the two chosen ideas</h2>
+
+    <div class="nom-grid">
+      <div>
+        <label>admitted →</label>
+        <input type="text" id="n1" autocomplete="off">
+      </div>
+      <div>
+        <label>lost confidence →</label>
+        <input type="text" id="n2" autocomplete="off">
+      </div>
+    </div>
+
+    <button class="primary" id="checkNom">Check nominalisations</button>
+    <div class="feedback" id="nomFb"></div>
+  </div>
+
+  <div class="stage hidden" id="stage3">
+    <h2>3 · Rebuild the complete sentence</h2>
+    <p class="note">Use those two nominalised concepts to make the sentence more compact and controlled. Keep the remaining information where it fits naturally.</p>
+
+    <textarea id="rewrite" placeholder="Write your upgraded sentence..."></textarea><br>
+    <button class="primary" id="checkRewrite">Check sentence</button>
+    <button class="secondary" id="showKey">Show possible answer</button>
+    <div class="feedback" id="rewriteFb"></div>
+
+    <div class="key" id="keyBox">
+      <strong>Possible answer:</strong><br>
+      The company’s admission that it had misled customers caused an immediate loss of investor confidence.
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+function norm(s){
+  return String(s).toLowerCase().trim().replace(/[’]/g,"'").replace(/[.,!?;:]+$/g,"").replace(/\s+/g," ");
+}
+
+document.getElementById("checkChoice").addEventListener("click",()=>{
+  const selected=[...document.querySelectorAll('#stage1 input[type="checkbox"]:checked')].map(x=>x.value);
+  const ok=selected.length===2 && selected.includes("admitted") && selected.includes("loss");
+  const fb=document.getElementById("choiceFb");
+
+  if(ok){
+    fb.className="feedback good";
+    fb.innerHTML="✓ Correct. <strong>ADMISSION → LOSS OF CONFIDENCE</strong> gives the clearest structure. <em>Misled customers</em> could be nominalised, but it does not need to become one of the main concepts in this rewrite.";
+    document.getElementById("stage2").classList.remove("hidden");
+  }else{
+    fb.className="feedback bad";
+    fb.textContent="Not quite. Choose the two ideas that should organise the new sentence most clearly and economically.";
+  }
+});
+
+document.getElementById("checkNom").addEventListener("click",()=>{
+  const a=norm(document.getElementById("n1").value);
+  const b=norm(document.getElementById("n2").value);
+  const ok1=a.includes("admission");
+  const ok2=b.includes("loss") && b.includes("confidence");
+
+  document.getElementById("n1").style.borderColor=ok1?"#2e7d32":"#b3261e";
+  document.getElementById("n2").style.borderColor=ok2?"#2e7d32":"#b3261e";
+
+  const fb=document.getElementById("nomFb");
+  if(ok1 && ok2){
+    fb.className="feedback good";
+    fb.textContent="✓ Correct.";
+    document.getElementById("stage3").classList.remove("hidden");
+  }else{
+    fb.className="feedback bad";
+    fb.textContent="Not yet. Check the item(s) marked in red.";
+  }
+});
+
+document.getElementById("checkRewrite").addEventListener("click",()=>{
+  const x=norm(document.getElementById("rewrite").value);
+  const hasAdmission=x.includes("admission");
+  const hasLoss=x.includes("loss") && x.includes("confidence");
+  const hasCompany=x.includes("company");
+  const hasInvestor=x.includes("investor");
+  const hasMisled=x.includes("misled") || x.includes("misleading") || x.includes("deception");
+  const hasLink=x.includes("caused") || x.includes("led to") || x.includes("resulted in") || x.includes("brought about") || x.includes("prompted");
+
+  const fb=document.getElementById("rewriteFb");
+  if(hasAdmission && hasLoss && hasCompany && hasInvestor && hasMisled && hasLink){
+    fb.className="feedback good";
+    fb.textContent="✓ Correct.";
+  }else{
+    fb.className="feedback bad";
+    fb.textContent="Not yet. Keep ADMISSION and LOSS OF CONFIDENCE as the two main concepts, but preserve the full original meaning.";
+  }
+});
+
+document.getElementById("showKey").addEventListener("click",()=>{
+  document.getElementById("keyBox").style.display="block";
+});
+</script>
+</body>
+</html>

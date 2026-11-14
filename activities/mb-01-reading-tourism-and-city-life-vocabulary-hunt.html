@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gateway On-Demand | Tourism Vocabulary Hunt</title>
+<style>
+:root{
+  --navy:#073b4c; --teal:#0b6f75; --gold:#c89b2b; --cream:#f7f2e8;
+  --ink:#17313a; --green:#2e7d32; --red:#b3261e; --soft:#eef3f2;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--soft);color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;line-height:1.55
+}
+header{background:var(--navy);color:#fff;padding:20px}
+header .inner,main{max-width:1000px;margin:auto}
+h1{margin:0;font-size:clamp(26px,4vw,40px)}
+.sub{margin-top:5px;color:#f2d16f;font-weight:700}
+main{padding:20px 14px 50px}
+.card{
+  background:#fff;border-radius:14px;padding:20px;margin:18px 0;
+  box-shadow:0 2px 12px #0001;border-top:6px solid var(--teal)
+}
+.band{display:inline-block;background:#f2cc46;padding:5px 10px;border-radius:8px;font-weight:700}
+.textbox{
+  background:#fbfcfc;border:1px solid #d6dedf;border-radius:10px;
+  padding:18px;font-size:1.02rem
+}
+.textbox p{margin:0 0 15px}
+.target{
+  transition:.2s;
+}
+.target.found{
+  background:#dff2e4;
+  box-shadow:inset 0 -2px 0 #2e7d32;
+  border-radius:3px;
+}
+.prompt{
+  margin-top:18px;padding:16px;border-left:5px solid var(--gold);
+  background:#fff9e9;border-radius:8px
+}
+.number{font-weight:700;color:var(--teal);margin-bottom:5px}
+.definition{font-size:1.16rem;font-weight:700}
+.answer-row{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:14px
+}
+input{
+  flex:1;min-width:240px;padding:11px 12px;border:2px solid #adb9bc;
+  border-radius:8px;font-size:1rem
+}
+button{
+  border:0;border-radius:8px;padding:10px 14px;font-size:1rem;
+  font-weight:700;cursor:pointer
+}
+.check{background:var(--navy);color:white}
+.show{background:var(--gold);color:#263d49}
+.next{background:var(--teal);color:white;display:none}
+.feedback{min-height:27px;margin-top:8px;font-weight:700}
+.good{color:var(--green)} .bad{color:var(--red)}
+.progress-wrap{
+  height:10px;background:#dde5e5;border-radius:20px;overflow:hidden;margin-top:14px
+}
+.progress{height:100%;width:0;background:var(--teal);transition:.25s}
+.score{margin-top:7px;color:#627277;font-size:.9rem}
+.finish{
+  display:none;background:#e8f4ec;border:2px solid #84b593;
+  border-radius:10px;padding:16px;margin-top:18px
+}
+@media(max-width:600px){
+  .answer-row{display:block}
+  input{width:100%;margin-bottom:8px}
+  button{margin-right:5px;margin-bottom:5px}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="inner">
+  <div style="font-size:.78rem;letter-spacing:.08em;font-weight:700">GATEWAY · ON-DEMAND · VOCABULARY</div>
+  <h1>Tourism and City Life: Vocabulary Hunt</h1>
+  <div class="sub">MB · Find the exact word or expression in the text</div>
+</div>
+</header>
+
+<main>
+<section class="card">
+  <span class="band">VOCABULARY</span>
+  <p>Read the definition, then find the <strong>exact word or expression</strong> in the text and type it into the box. When you get it right, it will be highlighted in the reading.</p>
+
+  <div class="textbox" id="reading">
+    <p>Tourism has become an important part of the economy of many cities, bringing visitors,
+    <span class="target" data-key="investment">investment</span> and employment to places that might otherwise
+    <span class="target" data-key="struggle">struggle</span> to attract them.
+    However, when a city becomes <span class="target" data-key="increasingly-dependent">increasingly dependent</span>
+    on visitors, can tourism begin to damage the very place that makes people want to visit it?</p>
+
+    <p>On the one hand, tourism can make a major contribution to local
+    <span class="target" data-key="prosperity">prosperity</span>.
+    Visitors spend money in hotels, restaurants, museums and shops, supporting businesses and creating jobs for local residents.
+    Their presence can also justify <span class="target" data-key="investment">investment</span> in transport,
+    cultural events and the preservation of historic areas.
+    In this sense, tourism can help a city remain <span class="target" data-key="economically-active">economically active</span>
+    and <span class="target" data-key="internationally-visible">internationally visible</span>.</p>
+
+    <p>On the other hand, excessive tourism can gradually make everyday life more difficult for residents.
+    Homes may be converted into <span class="target" data-key="short-term-accommodation">short-term accommodation</span>,
+    <span class="target" data-key="rents">rents</span> may rise and traditional shops
+    <span class="target" data-key="may-be-replaced">may be replaced</span> by businesses aimed mainly at temporary visitors.
+    As neighbourhoods adapt to tourism, residents can begin to feel that their own city is being reorganised around somebody else’s needs.</p>
+
+    <p>In conclusion, tourism can bring <span class="target" data-key="substantial-benefits">substantial economic and cultural benefits</span>,
+    but those benefits <span class="target" data-key="can-be-undermined">can be undermined</span>
+    if local life becomes <span class="target" data-key="less-affordable">less affordable</span>
+    or <span class="target" data-key="less-sustainable">less sustainable</span>.
+    In my view, cities should continue to welcome visitors while placing reasonable limits on the changes tourism is allowed to cause.</p>
+  </div>
+
+  <div class="prompt">
+    <div class="number" id="number"></div>
+    <div class="definition" id="definition"></div>
+    <div class="answer-row">
+      <input id="answer" type="text" autocomplete="off" placeholder="Type the word or expression from the text">
+      <button class="check" id="checkBtn">Check</button>
+      <button class="show" id="showBtn">Show me</button>
+      <button class="next" id="nextBtn">Next</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+    <div class="score" id="score"></div>
+  </div>
+
+  <div class="finish" id="finish">
+    <strong>✓ Vocabulary hunt complete.</strong><br>
+    Go back through the text and notice how these expressions work in context, not just what they mean in isolation.
+  </div>
+</section>
+</main>
+
+<script>
+const items = [
+  {
+    key:"investment",
+    definition:"Money or resources put into something in order to improve it or produce future benefits.",
+    answers:["investment"]
+  },
+  {
+    key:"struggle",
+    definition:"To have difficulty doing or achieving something.",
+    answers:["struggle"]
+  },
+  {
+    key:"increasingly-dependent",
+    definition:"Relying more and more on something or someone.",
+    answers:["increasingly dependent"]
+  },
+  {
+    key:"prosperity",
+    definition:"The state of being economically successful or well-off.",
+    answers:["prosperity"]
+  },
+  {
+    key:"economically-active",
+    definition:"Having an economy in which business, employment and spending continue to function strongly.",
+    answers:["economically active"]
+  },
+  {
+    key:"internationally-visible",
+    definition:"Known, noticed or recognised beyond one's own country.",
+    answers:["internationally visible"]
+  },
+  {
+    key:"short-term-accommodation",
+    definition:"A place to stay for a limited period, often used by visitors or tourists.",
+    answers:["short-term accommodation","short term accommodation"]
+  },
+  {
+    key:"rents",
+    definition:"The amounts of money paid regularly for the use of a home or property.",
+    answers:["rents"]
+  },
+  {
+    key:"may-be-replaced",
+    definition:"Might be removed and substituted by something else.",
+    answers:["may be replaced"]
+  },
+  {
+    key:"substantial-benefits",
+    definition:"Considerable advantages affecting both the economy and cultural life.",
+    answers:["substantial economic and cultural benefits"]
+  },
+  {
+    key:"can-be-undermined",
+    definition:"Can be weakened, reduced or made less effective.",
+    answers:["can be undermined"]
+  },
+  {
+    key:"less-affordable",
+    definition:"More difficult for ordinary people to pay for.",
+    answers:["less affordable"]
+  },
+  {
+    key:"less-sustainable",
+    definition:"Less able to continue in the long term without creating serious problems.",
+    answers:["less sustainable"]
+  }
+];
+
+let index = 0;
+let solved = 0;
+let revealed = false;
+
+const numberEl = document.getElementById("number");
+const defEl = document.getElementById("definition");
+const answerEl = document.getElementById("answer");
+const feedbackEl = document.getElementById("feedback");
+const nextBtn = document.getElementById("nextBtn");
+const progressEl = document.getElementById("progress");
+const scoreEl = document.getElementById("score");
+const finishEl = document.getElementById("finish");
+
+function norm(s){
+  return String(s).toLowerCase().trim()
+    .replace(/[’]/g,"'")
+    .replace(/[.,!?;:]+$/g,"")
+    .replace(/\s+/g," ");
+}
+
+function loadItem(){
+  const item = items[index];
+  numberEl.textContent = `Definition ${index+1} of ${items.length}`;
+  defEl.textContent = item.definition;
+  answerEl.value = "";
+  answerEl.disabled = false;
+  feedbackEl.textContent = "";
+  feedbackEl.className = "feedback";
+  nextBtn.style.display = "none";
+  revealed = false;
+  answerEl.focus();
+  updateProgress();
+}
+
+function highlight(key){
+  document.querySelectorAll(`.target[data-key="${key}"]`).forEach(el=>{
+    el.classList.add("found");
+  });
+}
+
+function updateProgress(){
+  progressEl.style.width = `${(index/items.length)*100}%`;
+  scoreEl.textContent = `${solved} found without using “Show me”`;
+}
+
+function correct(){
+  const item = items[index];
+  highlight(item.key);
+  feedbackEl.className = "feedback good";
+  feedbackEl.textContent = "✓ Correct.";
+  answerEl.disabled = true;
+  nextBtn.style.display = "inline-block";
+  if(!revealed) solved++;
+  updateProgress();
+}
+
+document.getElementById("checkBtn").addEventListener("click",()=>{
+  const item = items[index];
+  const got = norm(answerEl.value);
+  const accepted = item.answers.map(norm);
+  if(accepted.includes(got)){
+    correct();
+  } else {
+    feedbackEl.className = "feedback bad";
+    feedbackEl.textContent = "Not quite. Look again at the wording in the text.";
+  }
+});
+
+document.getElementById("showBtn").addEventListener("click",()=>{
+  const item = items[index];
+  revealed = true;
+  highlight(item.key);
+  answerEl.value = item.answers[0];
+  answerEl.disabled = true;
+  feedbackEl.className = "feedback good";
+  feedbackEl.textContent = "Here it is in the text.";
+  nextBtn.style.display = "inline-block";
+});
+
+nextBtn.addEventListener("click",()=>{
+  if(index < items.length-1){
+    index++;
+    loadItem();
+  } else {
+    progressEl.style.width = "100%";
+    numberEl.textContent = "Complete";
+    defEl.textContent = "";
+    document.querySelector(".answer-row").style.display = "none";
+    feedbackEl.textContent = "";
+    finishEl.style.display = "block";
+    scoreEl.textContent = `${solved} of ${items.length} found without using “Show me”`;
+  }
+});
+
+answerEl.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && !answerEl.disabled){
+    document.getElementById("checkBtn").click();
+  }
+});
+
+loadItem();
+</script>
+</body>
+</html>
