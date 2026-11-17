@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gateway • The Missing Words — Paired Crossword</title>
+<style>
+:root{--ink:#203347;--muted:#627484;--line:#b6c4ce;--teal:#0c747b;--teal-light:#e7f4f3;--navy:#172f47;--paper:#f7f7f3;--cream:#fbf2e5;--accent:#b97443;--wrong:#ba4848}
+*{box-sizing:border-box}body{margin:0;background:#edf1f2;color:var(--ink);font-family:Inter,'Segoe UI',Arial,sans-serif;line-height:1.4}
+header{background:#162c43;color:#fff;padding:24px max(20px,calc((100vw - 1120px)/2));border-bottom:5px solid #c58e56}
+header .eyebrow{font-size:12px;letter-spacing:.2em;color:#cddde6;text-transform:uppercase;font-weight:800}
+header h1{font-family:Georgia,serif;font-size:clamp(29px,4vw,44px);font-weight:400;margin:4px 0 7px}
+header p{margin:0;font-size:14px;color:#d7e4e9;max-width:680px}
+main{max-width:1120px;margin:25px auto;padding:0 20px 35px}
+.card{background:white;border:1px solid #dbe3e6;border-radius:14px;box-shadow:0 7px 26px #1b334811;padding:22px}
+.choose{max-width:770px;margin:42px auto;text-align:center;padding:35px 30px}
+.choose h2{font-family:Georgia,serif;font-weight:400;font-size:30px;margin:0 0 9px}
+.choose p{max-width:530px;margin:0 auto 20px;color:var(--muted)}
+.role-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid #b9c8d1;background:#fff;color:var(--ink);font-weight:700;padding:11px 17px;transition:background .15s,transform .15s}
+button:hover{background:#f0f5f6}button:focus-visible,input:focus-visible{outline:3px solid #dfac67;outline-offset:2px}
+.primary{background:var(--teal);border-color:var(--teal);color:#fff}.primary:hover{background:#096269}
+button:active{transform:translateY(1px)}
+.mini{font-size:13px;padding:7px 11px}
+.badge{background:var(--cream);color:#86582e;font-weight:800;padding:4px 9px;border-radius:99px;font-size:12px;letter-spacing:.08em}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar > .left,.toolbar>.right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.toolbar h2{font-family:Georgia,serif;font-size:23px;font-weight:400;margin:0}
+.game-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.75fr);gap:18px;align-items:start}
+.instructions{font-size:14px;color:#385467;background:#f3f8f8;border-left:4px solid var(--teal);padding:11px 13px;border-radius:0 8px 8px 0;margin:0 0 17px}
+.gridbox{display:flex;justify-content:center;overflow-x:auto;padding:4px 0 10px}
+.crossword{display:grid;grid-template-columns:repeat(13,var(--cell));grid-template-rows:repeat(10,var(--cell));gap:0;--cell:clamp(24px,3.45vw,39px);border:2px solid transparent;user-select:none}
+.cell{width:var(--cell);height:var(--cell);position:relative;border:1px solid #758b9b;margin:-.5px;display:flex;align-items:center;justify-content:center;background:#fff;font-weight:800;font-size:clamp(13px,1.6vw,19px);color:var(--navy)}
+.cell.block{background:transparent;border:1px solid transparent}
+.cell.fixed{background:#e9f4f1;color:#0a6972}
+.cell.active{background:#fff0d9}.cell.fixed.active{background:#d7ede7}
+.cell.start:before{content:attr(data-number);font-size:9px;position:absolute;top:1px;left:2px;color:#667789;font-weight:700;line-height:1}
+.cell input{width:100%;height:100%;background:transparent;border:0;border-radius:0;outline:none;text-align:center;padding:6px 1px 0;text-transform:uppercase;font-weight:800;color:#26384a;font-size:inherit;font-family:inherit;caret-color:var(--teal)}
+.cell input:focus{box-shadow:inset 0 0 0 2px var(--accent)}
+.cell.wrong{background:#ffebeb}.cell.wrong input{color:#9e3535}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+.status{min-height:26px;color:#275a60;font-size:13px;font-weight:600;margin-top:11px}
+.side h3{font:400 23px Georgia,serif;margin:0 0 9px}
+.side .sub{font-size:12px;color:var(--muted);margin:0 0 14px}
+.word-group{margin-bottom:19px}.word-group h4{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.09em;color:#355166}
+.word-item{display:flex;gap:9px;align-items:center;justify-content:space-between;width:100%;border:1px solid #e5ebee;border-radius:7px;margin-bottom:6px;text-align:left;background:white;font-weight:600;padding:8px 9px;font-size:13px}
+.word-item:hover,.word-item.selected{border-color:#77b5b6;background:#edf8f7}
+.word-item .word{font-weight:800;color:#08666f;letter-spacing:.03em}.word-item .meta{font-size:12px;color:#607684;font-weight:500}
+.word-item .length{font-size:12px;color:#607684;white-space:nowrap}
+.mini-note{font-size:13px;color:#5c7080;margin:0}
+details.print-details{position:relative}details.print-details summary{cursor:pointer;list-style:none;border:1px solid #b9c8d1;border-radius:8px;background:white;padding:8px 11px;font-weight:700;font-size:13px}
+details.print-details[open] .print-menu{z-index:10;position:absolute;right:0;top:39px;background:#fff;padding:10px;border:1px solid #d1dce2;border-radius:10px;box-shadow:0 8px 22px #122a3e24;min-width:188px;display:grid;gap:5px}
+details.print-details .print-menu button{text-align:left;font-size:13px;padding:8px}
+footer{max-width:1120px;margin:0 auto;padding:0 20px 20px;color:#71818f;font-size:12px}
+.print-only{display:none}
+/* PRINTABLE PAGES */
+.print-page{font-family:Arial,sans-serif;color:#182b3d;page-break-after:always;break-after:page;padding:8mm 7mm 0}
+.print-page:last-child{page-break-after:auto;break-after:auto}
+.print-kicker{font-size:11px;letter-spacing:2px;font-weight:900;color:#0b7378;text-transform:uppercase;display:flex;justify-content:space-between;border-bottom:2px solid #1a3549;padding-bottom:8px}
+.print-page h1{font:normal 29px Georgia,serif;margin:17px 0 6px}.print-page .print-meta{font-size:12px;margin:0 0 15px;color:#456174}
+.print-note{background:#f1f6f5;padding:11px 14px;border-left:4px solid #0b7378;font-size:12px;margin:0 0 13px;max-width:650px}
+.print-grid{display:grid;grid-template-columns:repeat(13,30px);grid-template-rows:repeat(10,30px);width:max-content;margin:16px auto 19px}
+.print-cell{width:30px;height:30px;border:1px solid #6e7e89;position:relative;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;margin:-.5px;color:#142d44;background:#fff}
+.print-cell.block{border:0;background:transparent}.print-cell.fixed{background:#e2eeeb}.print-cell .num{position:absolute;left:2px;top:1px;font-size:7px;font-weight:bold;color:#577482}
+.print-lists{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:17px;max-width:690px}
+.print-lists h3{font-size:13px;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid #bbc9d0;padding-bottom:5px;margin:0 0 7px}
+.print-lists p{margin:0 0 5px;font-size:12px}.print-lists .answer{font-weight:700;color:#0d626b}
+.print-footer{font-size:11px;color:#677b87;border-top:1px solid #cbd5d9;margin-top:20px;padding-top:7px;display:flex;justify-content:space-between}
+@page{size:A4 portrait;margin:12mm}
+@media (max-width:810px){.game-layout{grid-template-columns:1fr}.crossword{--cell:clamp(24px,6.5vw,39px)}.toolbar{align-items:flex-start}}
+@media(max-width:510px){main{padding:0 9px}.card{padding:12px}.crossword{--cell:clamp(22px,6.45vw,30px)}.cell{font-size:13px}.cell.start:before{font-size:7px}}
+@media print{
+ body{background:#fff!important}header,main,footer{display:none!important}.print-only{display:block!important}
+ .print-page{display:block!important}
+ body[data-print-mode="A"] .print-page:not([data-role="A"]),body[data-print-mode="B"] .print-page:not([data-role="B"]),body[data-print-mode="KEY"] .print-page:not([data-role="KEY"]),body[data-print-mode="BOTH"] .print-page[data-role="KEY"]{display:none!important}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body data-print-mode="BOTH">
+<header class="screen-only"><div class="eyebrow">Gateway · The Challenge · LB (B1–B2)</div><h1>The Missing Words</h1><p>A two-person crossword. One shared grid, two different sets of words — and a reason to talk.</p></header>
+<main class="screen-only">
+<section id="choose" class="card choose">
+ <span class="badge">PAIRED INFORMATION GAP</span>
+ <h2>Which student are you?</h2>
+ <p>You and your partner open the <strong>same file</strong> on separate devices. Choose different versions. Each version contains half the answers.</p>
+ <div class="role-buttons"><button class="primary" id="chooseA">I'm Student A</button><button class="primary" id="chooseB">I'm Student B</button></div>
+ <p style="font-size:12px;margin-top:19px;margin-bottom:4px">Printing instead? <button class="mini" id="choosePrint">Print A + B worksheets</button></p>
+</section>
+<section id="game" hidden>
+ <div class="toolbar"><div class="left"><h2>Student <span id="roleTitle">A</span></h2><span class="badge">LB · LOWER B2.1</span><button class="mini" id="switchRole">Switch student</button></div>
+ <div class="right"><button class="mini" id="printMine">Print my sheet</button><details class="print-details" id="printDetails"><summary>More print options ▾</summary><div class="print-menu"><button data-print="A">Student A</button><button data-print="B">Student B</button><button data-print="BOTH">Both worksheets</button><button data-print="KEY">Teacher's answer key</button></div></details></div></div>
+ <div class="game-layout">
+  <section class="card"><p class="instructions"><strong>Speak, don't spell.</strong> Explain the words you already have, one at a time. Your partner must ask questions and type their answers. Swap roles. Don't say the word or translate it.</p>
+  <div class="gridbox"><div class="crossword" id="grid" role="group" aria-label="Interactive crossword puzzle"></div></div>
+  <div class="controls"><button id="check" class="primary">Check my missing words</button><button id="clear" class="mini">Clear my answers</button></div><div id="status" class="status" aria-live="polite">Select a blank square and type. Your given words are already filled in.</div>
+  </section>
+  <aside class="card side"><h3>Your words</h3><p class="sub">Numbers and directions refer to the grid. Click any entry to highlight it.</p><div class="word-group"><h4>Explain these to your partner</h4><div id="givenList"></div></div><div class="word-group"><h4>Ask your partner about these</h4><div id="missingList"></div></div><p class="mini-note"><strong>Useful phrases:</strong> “It's a verb meaning…” · “For example…” · “It's the opposite of…” · “Do you mean…?” · “Could you give me another example?”</p></aside>
+ </div>
+</section>
+</main>
+<footer class="screen-only">Gateway · EOI Alzira · The Challenge · Works offline. For remote pairs, talk on a call while keeping separate screens.</footer>
+<div class="print-only" id="printPages"></div>
+<script>
+'use strict';
+const DATA={"height":10,"width":13,"entries":[{"number":1,"word":"SUGGEST","row":0,"col":2,"dir":"down","owner":"B"},{"number":2,"word":"DECIDE","row":0,"col":10,"dir":"down","owner":"B"},{"number":3,"word":"DOUBT","row":1,"col":0,"dir":"across","owner":"A"},{"number":4,"word":"CANCEL","row":1,"col":6,"dir":"across","owner":"A"},{"number":5,"word":"AGREE","row":1,"col":7,"dir":"down","owner":"B"},{"number":6,"word":"SUPPORT","row":3,"col":0,"dir":"down","owner":"A"},{"number":7,"word":"IMPROVE","row":3,"col":4,"dir":"down","owner":"A"},{"number":8,"word":"PROMISE","row":3,"col":6,"dir":"across","owner":"B"},{"number":9,"word":"EXPLAIN","row":3,"col":12,"dir":"down","owner":"A"},{"number":10,"word":"POSTPONE","row":5,"col":0,"dir":"across","owner":"B"},{"number":11,"word":"CONVINCE","row":7,"col":3,"dir":"across","owner":"A"},{"number":12,"word":"REFUSE","row":9,"col":3,"dir":"across","owner":"B"}],"letters":{"5,0":"P","5,1":"O","5,2":"S","5,3":"T","5,4":"P","5,5":"O","5,6":"N","5,7":"E","1,7":"A","2,7":"G","3,7":"R","4,7":"E","0,2":"S","1,2":"U","2,2":"G","3,2":"G","4,2":"E","6,2":"T","1,0":"D","1,1":"O","1,3":"B","1,4":"T","3,4":"I","4,4":"M","6,4":"R","7,4":"O","8,4":"V","9,4":"E","9,3":"R","9,5":"F","9,6":"U","9,7":"S","9,8":"E","3,6":"P","3,8":"O","3,9":"M","3,10":"I","3,11":"S","3,12":"E","3,0":"S","4,0":"U","6,0":"P","7,0":"O","8,0":"R","9,0":"T","1,6":"C","1,8":"N","1,9":"C","1,10":"E","1,11":"L","0,10":"D","2,10":"C","4,10":"D","5,10":"E","4,12":"X","5,12":"P","6,12":"L","7,12":"A","8,12":"I","9,12":"N","7,3":"C","7,5":"N","7,6":"V","7,7":"I","7,8":"N","7,9":"C","7,10":"E"}};
+const entries=DATA.entries;
+const H=DATA.height,W=DATA.width;
+let role=null,inputs={},activeId=null,typed={},lastCheck=false;
+const el=id=>document.getElementById(id);
+const entryById=Object.fromEntries(entries.map(e=>[e.number,e]));
+const blankCellMap=new Map();const startMap=new Map();
+entries.forEach(e=>{startMap.set(`${e.row},${e.col}`,e.number);for(let i=0;i<e.word.length;i++){const r=e.row+(e.dir==='down'?i:0),c=e.col+(e.dir==='across'?i:0),k=`${r},${c}`;if(!blankCellMap.has(k))blankCellMap.set(k,[]);blankCellMap.get(k).push(e.number);}});
+function knownLetters(forRole){const known={};entries.filter(e=>e.owner===forRole).forEach(e=>{for(let i=0;i<e.word.length;i++){const r=e.row+(e.dir==='down'?i:0),c=e.col+(e.dir==='across'?i:0);known[`${r},${c}`]=e.word[i];}});return known;}
+function cellValue(k){return knownLetters(role)[k]??typed[k]??''}
+function getCells(e){return Array.from({length:e.word.length},(_,i)=>`${e.row+(e.dir==='down'?i:0)},${e.col+(e.dir==='across'?i:0)}`)}
+function makeCell(k,forRole,forPrint=false){const known=forRole==='KEY'?DATA.letters:knownLetters(forRole);const [r,c]=k.split(',').map(Number);const isBlock=!blankCellMap.has(k);const div=document.createElement('div');div.className=(forPrint?'print-cell':'cell')+(isBlock?' block':'')+(known[k]?' fixed':'')+(startMap.has(k)?' start':'');div.dataset.key=k;
+ if(isBlock)return div;
+ if(startMap.has(k)){if(forPrint){const num=document.createElement('span');num.className='num';num.textContent=startMap.get(k);div.appendChild(num)}else{div.dataset.number=startMap.get(k)}}
+ if(forPrint){div.append(document.createTextNode(known[k]??''));return div;}
+ if(known[k]){const span=document.createElement('span');span.textContent=known[k];div.appendChild(span);}else{
+ const input=document.createElement('input');input.setAttribute('maxlength','1');input.setAttribute('autocomplete','off');input.setAttribute('autocapitalize','characters');input.setAttribute('spellcheck','false');input.setAttribute('aria-label',`Row ${r+1}, column ${c+1}`);input.value=typed[k]||'';
+ input.addEventListener('focus',()=>activateCell(k));input.addEventListener('click',()=>activateCell(k,true));input.addEventListener('input',()=>typeHere(k,input.value));input.addEventListener('keydown',ev=>keyHandler(ev,k));div.appendChild(input);inputs[k]=input;
+ }return div;}
+function render(){if(!role)return;el('roleTitle').textContent=role;el('grid').innerHTML='';inputs={};for(let r=0;r<H;r++)for(let c=0;c<W;c++)el('grid').appendChild(makeCell(`${r},${c}`,role));renderLists();highlight();updateProgress(false);}
+function renderLists(){['given','missing'].forEach(kind=>{const dest=el(kind==='given'?'givenList':'missingList');dest.innerHTML='';entries.filter(e=>(e.owner===role)===(kind==='given')).forEach(e=>{const btn=document.createElement('button');btn.className='word-item';btn.dataset.entry=e.number;
+ const left=document.createElement('span');const meta=document.createElement('span');meta.className='meta';meta.textContent=`${e.number} ${e.dir}`;
+ const word=document.createElement('span');word.className=kind==='given'?'word':'length';word.textContent=kind==='given'?e.word:`${e.word.length} letters`;
+ left.appendChild(meta);btn.append(left,word);btn.addEventListener('click',()=>{activeId=e.number;highlight();if(kind==='missing'){const target=getCells(e).find(k=>inputs[k]);if(target)inputs[target].focus();}});dest.appendChild(btn);});});}
+function activateCell(k,toggle=false){const ids=(blankCellMap.get(k)||[]).filter(id=>entryById[id].owner!==role);if(!ids.length)return;if(toggle&&ids.length>1&&ids.includes(activeId))activeId=ids[(ids.indexOf(activeId)+1)%ids.length];else if(!ids.includes(activeId))activeId=ids[0];highlight();}
+function highlight(){document.querySelectorAll('#grid .cell').forEach(d=>{d.classList.toggle('active',activeId!==null&&getCells(entryById[activeId]).includes(d.dataset.key));});document.querySelectorAll('.word-item').forEach(b=>b.classList.toggle('selected',Number(b.dataset.entry)===activeId));}
+function typeHere(k,value){const char=(value.toUpperCase().replace(/[^A-Z]/g,'')) .slice(-1);typed[k]=char;inputs[k].value=char;document.querySelector(`.cell[data-key="${k}"]`)?.classList.remove('wrong');lastCheck=false;updateProgress(false);if(char&&activeId){const order=getCells(entryById[activeId]);let i=order.indexOf(k);for(let j=i+1;j<order.length;j++)if(inputs[order[j]]){inputs[order[j]].focus();return;}}}
+function keyHandler(ev,k){if(ev.key==='Backspace'&&!inputs[k].value){const order=activeId?getCells(entryById[activeId]):[];const i=order.indexOf(k);for(let j=i-1;j>=0;j--)if(inputs[order[j]]){inputs[order[j]].focus();inputs[order[j]].select();break;}}else if(['ArrowRight','ArrowLeft','ArrowUp','ArrowDown'].includes(ev.key)){ev.preventDefault();const [r,c]=k.split(',').map(Number);let dr=ev.key==='ArrowDown'?1:ev.key==='ArrowUp'?-1:0,dc=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;let rr=r+dr,cc=c+dc;while(rr>=0&&rr<H&&cc>=0&&cc<W){const kk=`${rr},${cc}`;if(inputs[kk]){inputs[kk].focus();break;}rr+=dr;cc+=dc;}}}
+function missingWords(){return entries.filter(e=>e.owner!==role)}
+function updateProgress(check){const ws=missingWords();const complete=ws.filter(e=>getCells(e).every(k=>cellValue(k))).length;let msg=`${complete} of ${ws.length} missing words filled in.`;
+ if(check){const good=ws.filter(e=>getCells(e).map(k=>cellValue(k)).join('')===e.word);const errors=ws.filter(e=>!good.includes(e));msg=`${good.length} of ${ws.length} missing words correct.`+(errors.length?' Look again at: '+errors.map(e=>e.number+' '+e.dir).join(', ')+'.':' Excellent — your crossword is complete!');
+ document.querySelectorAll('#grid .cell').forEach(d=>d.classList.remove('wrong'));errors.forEach(e=>getCells(e).forEach(k=>{if(inputs[k]&&typed[k])document.querySelector(`.cell[data-key="${k}"]`)?.classList.add('wrong')}));lastCheck=true;
+ }el('status').textContent=msg;}
+function setRole(next){role=next;typed={};activeId=null;el('choose').hidden=true;el('game').hidden=false;render();window.scrollTo(0,0)}
+function printSheets(which){document.body.dataset.printMode=which;el('printDetails').open=false;window.print()}
+function generatePrint(){const container=el('printPages');container.innerHTML='';for(const pRole of ['A','B','KEY']){const page=document.createElement('section');page.className='print-page';page.dataset.role=pRole;
+ const kicker=document.createElement('div');kicker.className='print-kicker';kicker.innerHTML='<span>Gateway / The Challenge</span><span>LB · B1–B2</span>';page.append(kicker);
+ const h1=document.createElement('h1');h1.textContent=pRole==='KEY'?'The Missing Words — Answer Key':`The Missing Words — Student ${pRole}`;page.append(h1);
+ const meta=document.createElement('p');meta.className='print-meta';meta.textContent='Name: _________________________________   Partner: _________________________________';page.append(meta);
+ const note=document.createElement('p');note.className='print-note';note.textContent=pRole==='KEY'?'Teacher copy. Both students have the same grid, but each sees only six completed words.':"With your partner, complete the crossword by speaking. Explain your given words without saying, spelling or translating them. Ask questions and write your partner's answers.";page.append(note);
+ const grid=document.createElement('div');grid.className='print-grid';for(let r=0;r<H;r++)for(let c=0;c<W;c++)grid.appendChild(makeCell(`${r},${c}`,pRole,true));page.append(grid);
+ if(pRole!=='KEY'){
+ const lists=document.createElement('div');lists.className='print-lists';for(const kind of ['given','missing']){const side=document.createElement('div');const h=document.createElement('h3');h.textContent=kind==='given'?'Explain these words':'Find these words';side.append(h);entries.filter(e=>(e.owner===pRole)===(kind==='given')).forEach(e=>{const line=document.createElement('p');line.innerHTML=`<strong>${e.number} ${e.dir}</strong> · <span class="${kind==='given'?'answer':''}">${kind==='given'?e.word:e.word.length+' letters'}</span>`;side.append(line)});lists.append(side);}page.append(lists);
+ }else{const lists=document.createElement('div');lists.className='print-lists';for(const dir of ['across','down']){const side=document.createElement('div');const h=document.createElement('h3');h.textContent=dir;side.append(h);entries.filter(e=>e.dir===dir).forEach(e=>{const line=document.createElement('p');line.innerHTML=`<strong>${e.number}</strong> · ${e.word}`;side.append(line);});lists.append(side);}page.append(lists);}
+ const footer=document.createElement('div');footer.className='print-footer';footer.innerHTML='<span>EOI Alzira · Oral information-gap activity</span><span>The Missing Words</span>';page.append(footer);container.append(page);
+ }}
+el('chooseA').onclick=()=>setRole('A');el('chooseB').onclick=()=>setRole('B');el('switchRole').onclick=()=>{el('game').hidden=true;el('choose').hidden=false;role=null;window.scrollTo(0,0)};
+el('choosePrint').onclick=()=>printSheets('BOTH');el('printMine').onclick=()=>printSheets(role||'BOTH');document.querySelectorAll('[data-print]').forEach(b=>b.onclick=()=>printSheets(b.dataset.print));
+el('check').onclick=()=>updateProgress(true);el('clear').onclick=()=>{if(!confirm('Clear the answers you have typed?'))return;typed={};render();};
+generatePrint();
+</script>
+</body>
+</html>
